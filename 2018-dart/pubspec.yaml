@@ -12,3 +12,4 @@ dependencies:
   args: ^1.5.1
 
 dev_dependencies:
+  test: ^1.0.0

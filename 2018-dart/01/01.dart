@@ -1,6 +1,4 @@
 import 'package:aoc_2018/util.dart';
-// import 'package:path/path.dart' as p; //p.join('01', infile);
-import 'package:args/args.dart';
 
 int sumInts(List<int> list) => list.reduce((a, b) => a + b);
 
@@ -9,7 +7,7 @@ List<int> runningIntsSum(List<int> list, [initVal=0]) =>
     return a.isEmpty? [b + initVal]: a + [a.last + b];
   });
 
-Map<String, int> firstRepeatSum(List<int> list, [int maxIters=999]) {
+Map<String, int> firstRepeatSum(List<int> list, [int maxIters=9999]) {
   var mem = {};
   var iters = 0;
   var sum = 0;
@@ -26,13 +24,13 @@ Map<String, int> firstRepeatSum(List<int> list, [int maxIters=999]) {
 }    
 
 main(List<String> args){
-  var parser = ArgParser();
-  parser.addOption('inpath', abbr: 'i', defaultsTo: '01/input.txt');
-  parser.addOption('dbg', abbr: 'v', defaultsTo: '1');
+  final parser = getArgParser(args, '01');
   final infile = parser.parse(args)['inpath'];
   final dbg = int.parse(parser.parse(args)['dbg']);
 
-  List<int> frequencies = fileToInts(infile);
+  final frequencies = filepathToStrings(infile)
+    .map((_) => int.parse(_))
+    .toList();
   final sum = sumInts(frequencies);
   final sums = runningIntsSum(frequencies);
   assert(sum == sums.last);
