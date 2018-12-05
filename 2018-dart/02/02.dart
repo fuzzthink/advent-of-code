@@ -22,7 +22,7 @@ int poormanChecksum(List<String> list) {
   return twos * threes;
 }
 
-String commonString(String a, String b){//}, int byCnt) {
+String commonString(String a, String b){
   var res = '';
   final maxLen = a.length < b.length? a.length: b.length;
   for (int i = 0; i < maxLen; i++){
