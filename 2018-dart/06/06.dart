@@ -21,13 +21,15 @@ Map parseXY(List<String> list){
 class ColorMap {
   List<List<int>> tm;
   List<List<int>> mp;
-  Map<String,int> org;
-  Map<int,int> counts;
+  Map<String,int> org = {};
+  Map<int,int> counts = {};
   int xLen;
   int yLen;
   int dbg;
   int biggestCount = 0;
   int biggestColor = 0;
+  int centerX = 0;
+  int centerY = 0;
   int OOB = -2;
   int Empty = -1;
   int Neutral = 0;
@@ -37,14 +39,20 @@ class ColorMap {
   ColorMap(this.xLen, this.yLen, List pts, [this.dbg=0]){
     tm = List.generate(yLen, (i) => List.filled(xLen, Empty));
     mp = List.generate(yLen, (i) => List.filled(xLen, Empty));
-    counts = {};
-    org = {};
+    var xSum = 0;
+    var ySum = 0;
     pts.asMap().forEach((i, p){
       final color = i+1;
-      set(p[0], p[1], color);
-      setOrg(p[0], p[1], color);
+      final x = p[0];
+      final y = p[1];
+      set(x, y, color);
+      setOrg(x, y, color);
       counts[color] = 0;
+      xSum += x;
+      ySum += y;
     });
+    centerX = xSum ~/ pts.length;
+    centerY = ySum ~/ pts.length;
   }
 
   setOrg(int x, int y, int v){
@@ -185,7 +193,7 @@ class ColorMap {
 
   printMap([int iter]){
     final indices = 
-      '01234567 10 234567 20 234567 30 234567 40 234567 50 234567 60 234567 7'
+    '   01234567 10 234567 20 234567 30 234567 40 234567 50 234567 60 234567 7'
       '0 234567 80 234567 90 23456 100 23456 110 23456 120 23456 130 23456 14'
       '0123456 150 23456 160 23456 170 23456 180 23456 190 23456 200 23456 21'
       '0123456 220 23456 230 23456 240 23456 250 23456 260 23456 270 23456 28'
@@ -194,7 +202,7 @@ class ColorMap {
     if (iter != null) print('Iteration $iter:');
     print(indices);
     for (int y = 0; y < yLen; y++){
-      var s = ''; 
+      var s = y%10==0? '${y~/10} '.padLeft(3): '   '; 
       var more = '';
       var notOrigin = true;
 
@@ -209,10 +217,27 @@ class ColorMap {
     }
   }
 
-  printCounts(){
-    counts.forEach((c, count){
-      print('${chrOf(c)}: $count');
+  getDistToOrgs(int x, int y){
+    int xs = 0;
+    int ys = 0;
+    org.forEach((xyStr, c){
+      final p = xyStr.split(',');
+      xs += (int.parse(p[0]) - x).abs();
+      ys += (int.parse(p[1]) - y).abs();
     });
+    return xs + ys;
+  }
+
+  getCenterArea([int max=9999]){
+    final offset = max~/50;
+    var count = 0;
+    for (int y=centerY-offset; y < centerY+offset; y++)
+      for (int x=centerX-offset; x < centerX+offset; x++)
+        if (x >= 0 || x < xLen || y >= 0 || y < yLen){
+          final d = getDistToOrgs(x, y);
+          if (d <= max) count += 1;
+        }
+    return count;
   }
 }
 
@@ -229,5 +254,8 @@ main(List<String> args) async {
   if (dbg > 0) colorMap.printMap(-1);
   final r = colorMap.getBiggest();
   print('Biggest area is ${r['color']} with area of ${r['count']}');
-  
+
+  const maxDists = 9999;
+  final cnt = colorMap.getCenterArea(maxDists);
+  print('Area of sum of dists <= $maxDists to points is $cnt');
 }
