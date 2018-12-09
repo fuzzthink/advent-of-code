@@ -39,7 +39,7 @@ main(List<String> args){
   final r = firstRepeatSum(frequencies, maxIters);
   final iters = r['len'] ~/ frequencies.length;
 
-  print('Sum of inputs: $sum');
+  print('Result frequency (sum of inputs): $sum');
   if (r['iters'] == maxIters)
     print('No repeat found in $maxIters iterations');
   else

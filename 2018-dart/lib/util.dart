@@ -1,4 +1,5 @@
 library util;
 
-export 'src/fileUtil.dart';
 export 'src/cliUtil.dart';
+export 'src/fileUtil.dart';
+export 'src/mathUtil.dart';
