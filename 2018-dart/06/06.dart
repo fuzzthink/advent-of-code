@@ -23,6 +23,7 @@ class ColorMap {
   List<List<int>> mp;
   Map<String,int> org = {};
   Map<int,int> counts = {};
+  Map<int,int> edgeCnts = {};
   int xLen;
   int yLen;
   int dbg;
@@ -30,6 +31,7 @@ class ColorMap {
   int biggestColor = 0;
   int centerX = 0;
   int centerY = 0;
+  int numPts = 0;
   int OOB = -2;
   int Empty = -1;
   int Neutral = 0;
@@ -51,8 +53,9 @@ class ColorMap {
       xSum += x;
       ySum += y;
     });
-    centerX = xSum ~/ pts.length;
-    centerY = ySum ~/ pts.length;
+    numPts = pts.length;
+    centerX = xSum ~/ numPts;
+    centerY = ySum ~/ numPts;
   }
 
   setOrg(int x, int y, int v){
@@ -81,10 +84,8 @@ class ColorMap {
     for (int y=0; y < yLen; y++){
       for (int x=0; x < xLen; x++){
         if (getTm(x,y) > Empty){
-          if (get(x,y) > Empty){
-            print('($x,$y) is ${get(x,y)}, can not set to already set value');
-            Error();
-          }
+          assert(get(x,y) <= Empty,
+            '($x,$y) is already set to ${get(x,y)}, can not set to new value');
           set(x, y, getTm(x, y));
         }
       }
@@ -125,9 +126,9 @@ class ColorMap {
     }
   }
 
-  calcArea(){
+  calcAreas(){
     assignColors();
-    setBorderCounts();
+    setEdgeCounts();
     for (int y=1; y < yLen-1; y++){
       for (int x=1; x < xLen-1; x++){
         final color = get(x, y);
@@ -139,11 +140,17 @@ class ColorMap {
         }
       }
     }
+    if (dbg > 0){
+      print('Calculations for extra constant areas at edges:');
+      edgeCnts.forEach((c, cnt){
+        print('${chrOf(c)}: $cnt edge area + ${counts[c] - cnt} map area = ${counts[c]}');
+      });
+    }
   }
 
   getBiggest() => {'count': biggestCount, 'color': chrOf(biggestColor)};
   
-  getBorderCount(int curCnt, int prvCnt, int c, int tl, int tr, int bl, int br){
+  getEdgeCount(int curCnt, int prvCnt, int c, int tl, int tr, int bl, int br){
     final diff = curCnt - prvCnt; 
     if (diff >= 0 || c==tl || c==tr || c==bl || c==br)
       return -1;
@@ -156,7 +163,7 @@ class ColorMap {
     }
   }
 
-  setBorderCounts(){
+  setEdgeCounts(){
     final _cur = {
       'top': mp[0],
       'btm': mp[yLen-1],
@@ -184,10 +191,12 @@ class ColorMap {
       for (var color in colors){
         final curCnt = _cur[dir].where((v) => v==color).length;
         final prvCnt = _prv[dir].where((v) => v==color).length;
-        final count = getBorderCount(curCnt, prvCnt, color, tl, tr, bl, br);
-        // print(count);
+        final count = getEdgeCount(curCnt, prvCnt, color, tl, tr, bl, br);
         counts[color] = count == -1? -1: counts[color] + count;
       }
+    });
+    counts.forEach((c, cnt){
+      if(cnt > 0) edgeCnts[c] = cnt;
     });
   }
 
@@ -199,10 +208,9 @@ class ColorMap {
       '0123456 220 23456 230 23456 240 23456 250 23456 260 23456 270 23456 28'
       '0123456 290 23456 300 23456 310 23456 320 23456 330 23456 340 23456789'
     ;
-    if (iter != null) print('Iteration $iter:');
-    print(indices);
+    print(iter==null || iter == -1? indices: 'Iteration $iter:\n$indices');
     for (int y = 0; y < yLen; y++){
-      var s = y%10==0? '${y~/10} '.padLeft(3): '   '; 
+      var s = y%5==0? '$y'.padLeft(3): '   '; 
       var more = '';
       var notOrigin = true;
 
@@ -229,14 +237,19 @@ class ColorMap {
   }
 
   getCenterArea([int max=9999]){
-    final offset = max~/50;
+    final avgDist = (xLen~/4 + yLen~/4) * numPts;
+    final offset = 5*(max - avgDist)~/numPts;
+    final MinRejects = xLen*yLen ~/ 40;
     var count = 0;
+    var rejects = 0;
     for (int y=centerY-offset; y < centerY+offset; y++)
       for (int x=centerX-offset; x < centerX+offset; x++)
         if (x >= 0 || x < xLen || y >= 0 || y < yLen){
           final d = getDistToOrgs(x, y);
           if (d <= max) count += 1;
+          else rejects += 1;
         }
+    assert(rejects > MinRejects, 'Only $rejects rejects, adjust offset to ensure large enough test area');
     return count;
   }
 }
@@ -250,12 +263,12 @@ main(List<String> args) async {
   final colorMap = ColorMap(p['lens'][0], p['lens'][1], p['pts'], dbg);
 
   if (dbg > 1) colorMap.printMap(0);
-  colorMap.calcArea();
+  colorMap.calcAreas();
   if (dbg > 0) colorMap.printMap(-1);
   final r = colorMap.getBiggest();
-  print('Biggest area is ${r['color']} with area of ${r['count']}');
+  print('${r['color']} has the biggest area of ${r['count']}');
 
   const maxDists = 9999;
   final cnt = colorMap.getCenterArea(maxDists);
-  print('Area of sum of dists <= $maxDists to points is $cnt');
+  print('Area of sum of dists to points <= $maxDists is $cnt');
 }
