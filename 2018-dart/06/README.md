@@ -1,6 +1,7 @@
+```
 Outputs visualized in ASCII:
-output.md - if you have a 2680+ monitor
-output.png - if not 
+output.md - viewing hint: keep zooming out until no lines overflow
+output.png - zoomed out for you
 
 --- Day 6: Chronal Coordinates ---
 The device on your wrist beeps several times, and once again you feel like you're falling.
@@ -96,3 +97,4 @@ This region, which also includes coordinates D and E, has a total size of 16.
 Your actual region will need to be much larger than this example, though, instead including all locations with a total distance of less than 10000.
 
 What is the size of the region containing all locations which have a total distance to all given coordinates of less than 10000?
+```

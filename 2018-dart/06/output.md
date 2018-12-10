@@ -1,3 +1,4 @@
+Viewing hint: keep zooming out until no lines overflow
 ```
 Calculations for extra constant areas at edges:
 M: 136 edge area + 944 map area = 1080

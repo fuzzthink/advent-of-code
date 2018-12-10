@@ -1,3 +1,4 @@
+```
 --- Day 5: Alchemical Reduction ---
 You've managed to sneak in to the prototype suit manufacturing lab. The Elves are making decent progress, but are still struggling with the suit's size reduction capabilities.
 
@@ -36,3 +37,4 @@ Removing all D/d units produces abAcCaCBAcCcaA. Fully reacting this polymer prod
 In this example, removing all C/c units was best, producing the answer 4.
 
 What is the length of the shortest polymer you can produce by removing all units of exactly one type and fully reacting the result?
+```
