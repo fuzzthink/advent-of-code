@@ -1,3 +1,7 @@
+Outputs visualized in ASCII:
+output.md - if you have a 2680+ monitor
+output.png - if not 
+
 --- Day 6: Chronal Coordinates ---
 The device on your wrist beeps several times, and once again you feel like you're falling.
 
