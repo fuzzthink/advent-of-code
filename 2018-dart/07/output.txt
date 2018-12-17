@@ -1,0 +1,157 @@
+Tasks:
+B->X
+V->F
+K->C
+S->D
+C->A
+H->X
+Q->W
+X->F
+J->R
+D->O
+F->P
+M->Z
+R->I
+Y->O
+G->Z
+Z->P
+O->L
+A->P
+U->L
+L->W
+P->W
+I->W
+E->N
+W->N
+T->N
+G->E
+K->T
+I->T
+V->H
+W->T
+M->A
+C->W
+B->Y
+Y->N
+L->N
+M->R
+L->I
+J->N
+K->M
+O->U
+P->N
+Y->I
+V->Q
+H->R
+M->P
+K->L
+J->A
+D->F
+Q->P
+C->H
+U->I
+A->T
+C->P
+U->T
+O->T
+O->I
+S->I
+Z->E
+Y->T
+K->O
+O->A
+Z->T
+Z->U
+U->P
+P->I
+S->W
+S->P
+S->Q
+C->E
+G->U
+D->L
+K->S
+R->O
+C->G
+V->G
+A->W
+Z->O
+J->O
+F->E
+U->E
+E->W
+M->O
+C->U
+G->P
+C->I
+Z->A
+C->J
+Q->R
+E->T
+F->Y
+Z->N
+I->N
+X->E
+I->E
+Q->O
+R->L
+K->W
+Y->L
+M->I
+F->O
+A->E
+Can visit: [B, V, K]
+Can visit: [K, V, X, Y]
+Can visit: [V, X, Y, C, T, M, L, O, S, W]
+Can visit: [L, M, O, S, T, V, W, X, Y, A, H, P, E, G, U, I, J]
+Can visit: [E, G, H, I, J, L, M, O, P, S, T, U, V, W, X, Y]
+Can visit: [G, H, I, J, L, M, O, P, S, T, U, V, W, X, Y, N]
+Can visit: [H, I, J, L, M, N, O, P, S, T, U, V, W, X, Y, Z]
+Can visit: [I, J, L, M, N, O, P, S, T, U, V, W, X, Y, Z, R]
+Can visit: [J, L, M, N, O, P, R, S, T, U, V, W, X, Y, Z]
+Can visit: [L, M, N, O, P, R, S, T, U, V, W, X, Y, Z]
+Can visit: [M, N, O, P, R, S, T, U, V, W, X, Y, Z]
+Can visit: [N, O, P, R, S, T, U, V, W, X, Y, Z]
+Can visit: [O, P, R, S, T, U, V, W, X, Y, Z]
+Can visit: [P, R, S, T, U, V, W, X, Y, Z]
+Can visit: [R, S, T, U, V, W, X, Y, Z]
+Can visit: [S, T, U, V, W, X, Y, Z]
+Can visit: [T, U, V, W, X, Y, Z, D, Q]
+Can visit: [Q, T, U, V, W, X, Y, Z, F]
+Can visit: [Q, T, U, V, W, X, Y, Z]
+Can visit: [T, U, V, W, X, Y, Z]
+Can visit: [U, V, W, X, Y, Z]
+Can visit: [V, W, X, Y, Z]
+Can visit: [W, X, Y, Z]
+Can visit: [X, Y, Z]
+Can visit: [Y, Z]
+Can visit: [Z]
+Traversal: BKCAEGHIJLMNOPRSDFQTUVWXYZ
+length: 26
+
+Part 2:
+ 62: [, V, K, , , B]
+ 71: [S, V, C, M, , BK]
+ 82: [S, , C, M, , BKV]
+134: [S, H, J, M, G, BKVC]
+144: [S, H, J, , G, BKVCM]
+150: [Q, H, J, D, G, BKVCMS]
+201: [Q, H, J, D, Z, BKVCMSG]
+202: [Q, X, J, D, Z, BKVCMSGH]
+204: [Q, X, , D, Z, BKVCMSGHJ]
+214: [Q, X, , , Z, BKVCMSGHJD]
+227: [R, X, , , Z, BKVCMSGHJDQ]
+286: [R, F, , , Z, BKVCMSGHJDQX]
+287: [R, F, , , , BKVCMSGHJDQXZ]
+305: [, F, , , , BKVCMSGHJDQXZR]
+352: [Y, , , , , BKVCMSGHJDQXZRF]
+437: [O, , , , , BKVCMSGHJDQXZRFY]
+512: [A, U, , , , BKVCMSGHJDQXZRFYO]
+573: [, U, , , , BKVCMSGHJDQXZRFYOA]
+593: [L, P, , , , BKVCMSGHJDQXZRFYOAU]
+665: [, P, , , , BKVCMSGHJDQXZRFYOAUL]
+669: [I, , , , , BKVCMSGHJDQXZRFYOAULP]
+738: [E, , , , , BKVCMSGHJDQXZRFYOAULPI]
+803: [W, , , , , BKVCMSGHJDQXZRFYOAULPIE]
+886: [T, , , , , BKVCMSGHJDQXZRFYOAULPIEW]
+1040 secs finish BKVCMSGHJDQXZRFYOAULPIEWTN with 5 workers
