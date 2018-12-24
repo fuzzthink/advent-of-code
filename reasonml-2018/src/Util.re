@@ -1,11 +1,12 @@
 open Belt
-let readFile = name => Node.Fs.readFileAsUtf8Sync("data/"++name++".txt");
+module JS = Js.String
 
-let reduceSumF = (f, acc, el) => acc +. f(el);
-let reduceSumI = (f, acc, el) => acc + f(el);
+let readFile = name => Node.Fs.readFileAsUtf8Sync("data/"++name++".txt")
+let readLines = name => readFile(name)->JS.split("\n", _)
 
 module ArrayUtil = {
-  let sumF = (arr, f) => arr->Array.reduce(0.0, reduceSumF(f));
-  let sumI = (arr, f) => arr->Array.reduce(0, reduceSumI(f));
-};
-module AU = ArrayUtil;
+  let sumFloat = arr => arr->Array.reduce(0.0, (acc, e) => acc +. e);
+  let sumInt = arr => arr->Array.reduce(0, (acc, e) => acc + e);
+  let getMax = arr => arr->Array.reduce(Int64.min_int, (acc, e) => e > acc? e: acc);
+}
+module AU = ArrayUtil
