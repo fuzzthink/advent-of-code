@@ -4,6 +4,7 @@ module JS = Js.String
 
 let readFile = name => Node.Fs.readFileAsUtf8Sync("data/"++name++".txt")
 let readLines = name => readFile(name)->JS.split("\n", _)
+let parseInts = str => str |> JS.match([%re "/-?[\\d]+/g"])
 
 module ListUtil = {
   let getMin = lst => lst->BL.reduce(max_int, (acc, e) => e < acc? e : acc);

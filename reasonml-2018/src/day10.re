@@ -1,8 +1,6 @@
 open Util
-module BO = Belt.Option
 module BA = Belt.Array
 module JS = Js.String
-module Q = Belt.MutableQueue
 
 type ptVel = {
   mutable x: int,
@@ -12,7 +10,7 @@ type ptVel = {
 }
 
 let ptVelParser = str => [@warning "-8"] {
-  let Some(intStrs) = str |> JS.match([%re "/-?[\\d]+/g"]);
+  let Some(intStrs) = str->parseInts
   let [|x, y, vx, vy|] = intStrs->BA.map(int_of_string);
   {x, y, vx, vy}
 }
@@ -53,6 +51,7 @@ let printPts = (ptVels, y0, y1, x0, x1) => {
     ->Js.Array.joinWith("\n", _);
   Js.log(mapStr)
 }
+
 let parsed = readLines("10")->BA.map(s => s->ptVelParser)
 let (minY, maxY, diff) = getMinMaxDiff(parsed)
 let (found, y0, y1, x0, x1) = findMinYDiff(parsed, minY, maxY, diff)

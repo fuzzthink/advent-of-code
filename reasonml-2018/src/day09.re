@@ -3,7 +3,6 @@ open Util
 open Int64
 module BA = Belt.Array
 module JS = Js.String
-module Q = MutableQueue
 
 type gameStat = {
   playersCnt: int,
@@ -54,7 +53,7 @@ let gameScores = stat => {
 }
 
 let statParser = (str, setScore) => [@warning "-8"] {
-  let Some(intStrs) = str |> JS.match([%re "/-?[\\d]+/g"]);
+  let Some(intStrs) = str->parseInts
   let ints = intStrs->BA.map(int_of_string);
   {
     playersCnt: ints->BA.getExn(0),
@@ -91,7 +90,7 @@ scores
 
 /* Real input */
 let stat = readFile("09")->statParser(false)
-stat->printHighScore("Score for input:")
+stat->printHighScore("Score for 09.txt input:")
 
 stat.lastWorth = stat.lastWorth * 100
-stat->printHighScore("Score for input with last marble worth 100x:")
+stat->printHighScore("Score for 09.txt input with last marble worth 100x:")
