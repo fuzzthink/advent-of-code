@@ -1,5 +1,6 @@
 open Belt
 open Util
+module BA = Belt.Array
 module JS = Js.String
 module Q = MutableQueue
 
@@ -25,19 +26,19 @@ let rec toNode = item => {
 let getInts = day =>
   readFile(day)
   -> JS.split(" ", _)
-  -> Array.map(int_of_string)
+  -> BA.map(int_of_string)
 
-let sumInts = ints => ints->Array.reduce(0, (acc, e) => acc+e)
+let sumInts = ints => ints->BA.reduce(0, (acc, e) => acc+e)
 
 let rec sumGraph = ({childs, items}) => {
   let sums = items->sumInts;
-  let childSums = childs->Array.map(sumGraph)->sumInts;
+  let childSums = childs->BA.map(sumGraph)->sumInts;
   sums + childSums;
 }
 
 let rec sumChilds = ({childs, items}) =>
-  if (childs->Array.length==0) items->sumInts 
-  else items->Array.reduce(0, (acc, e) => 
+  if (childs->BA.length==0) items->sumInts 
+  else items->BA.reduce(0, (acc, e) => 
     switch (childs[e-1]) {
     | Some(child) => acc + child->sumChilds
     | None => acc
