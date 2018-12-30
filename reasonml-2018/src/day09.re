@@ -1,8 +1,7 @@
 open Belt
 open Util
 open Int64
-open Array
-open Printf
+module BA = Belt.Array
 module JS = Js.String
 module Q = MutableQueue
 
@@ -11,7 +10,7 @@ type gameStat = {
   mutable lastWorth: int,
   highScore: int64,
 }
-type dlNode = {
+type dlNode = { /* doubly linked node */
   value: int64,
   mutable next: dlNode,
   mutable prv: dlNode,
@@ -37,15 +36,15 @@ let removePrv7 = (cur) => {
 
 let gameScores = stat => {
   let rec firstNode = {value: zero, next: firstNode, prv: firstNode}
-  let scores = Array.make(stat.playersCnt, zero)
+  let scores = BA.make(stat.playersCnt, zero)
   let player = ref(0)
   let cur = ref(firstNode)
-  Range.forEach(1, stat.lastWorth-1, i => {
+  Range.forEach(1, stat.lastWorth, i => {
     if (i mod 23 == 0){
       let iPlayer = player^
       let removedPts = removePrv7(cur)
       let points = i->of_int->add(removedPts)
-      scores->setExn(iPlayer, scores->getExn(iPlayer)->add(points))
+      scores->BA.setExn(iPlayer, scores->BA.getExn(iPlayer)->add(points))
     } else {
       cur->insertNext2(i->of_int)
     }
@@ -54,82 +53,45 @@ let gameScores = stat => {
   scores
 }
 
-let statParser = (str, setScore) => {
-  let ptsStr = setScore? " points: high score is": " points"
-  let cnt = (str
-  |> JS.replace(" players; last marble is worth", "")
-  |> JS.replace(ptsStr, "")
-  |> JS.split(" "))
-  -> Array.map(int_of_string)
-  -> Q.fromArray;
+let statParser = (str, setScore) => [@warning "-8"] {
+  let Some(intStrs) = str |> JS.match([%re "/-?[\\d]+/g"]);
+  let ints = intStrs->BA.map(int_of_string);
   {
-    playersCnt: cnt->Q.popExn,
-    lastWorth: cnt->Q.popExn,
-    highScore: setScore? cnt->Q.popExn->of_int: zero,
+    playersCnt: ints->BA.getExn(0),
+    lastWorth: ints->BA.getExn(1),
+    highScore: setScore? ints->BA.getExn(2)->Int64.of_int : zero,
   }
 }
 
-let testStr =
-{|9 players; last marble is worth 25 points: high score is 32
-10 players; last marble is worth 1618 points: high score is 8317
-13 players; last marble is worth 7999 points: high score is 146373
-17 players; last marble is worth 1104 points: high score is 2764
-21 players; last marble is worth 6111 points: high score is 54718
-30 players; last marble is worth 5807 points: high score is 37305|}
-
-let stats = testStr
-  ->JS.split("\n", _)
-  ->Array.map(s => s->statParser(true))
-
-let testScores = stats
-  ->Array.map(stat => stat->gameScores)
-
-Js.log("Test Expected Scores..")
-testScores
-  ->Array.map(scores => scores->AU.getMax)
-  ->Array.forEachWithIndex((i, score) => {
-  let expected = (stats->getExn(i)).highScore
-  let passed = score == expected
-  if (passed)
-    Js.log({j|✔|j})
-  else {
-    Js.log(sprintf("Got %Ld, expected %Ld, scores were", score, expected))
-    Js.log(testScores->getExn(i))
-  }
-})
-
-let input = readFile("09")
 let printHighScore = (stat, label) => {
   Js.log(label)
   stat
   ->gameScores
-  ->AU.getMax
+  ->AU.getMax64
   ->Js.log
 }
 
-let stat = input->statParser(false)
-stat->printHighScore("Real Input:")
+
+/* Sample inputs */
+Js.log("Test expected scores in sample games:")
+let stats = readLines("09test")->BA.map(s => s->statParser(true))
+let scores = stats->BA.map(stat => stat->gameScores)
+scores
+  ->BA.map(scores => scores->AU.getMax64)
+  ->BA.forEachWithIndex((i, score) => {
+    let expected = (stats->BA.getExn(i)).highScore
+    let passed = score == expected
+    if (passed)
+      Js.log({j|✔ Test case $i passed|j})
+    else {
+      Js.log({j|Got $score, expected $expected, scores were|j})
+      Js.log(scores->BA.getExn(i))
+    }
+  })
+
+/* Real input */
+let stat = readFile("09")->statParser(false)
+stat->printHighScore("Score for input:")
 
 stat.lastWorth = stat.lastWorth * 100
-stat->printHighScore("Real Input x 100:")
-
-/* 4th test does not match, who's error?
-Got 2720, expected 2764, scores were
-[ [ 0, 1582 ],
-  [ 0, 1957 ],
-  [ 0, 1945 ],
-  [ 0, 2509 ],
-  [ 0, 2347 ],
-  [ 0, 1368 ],
-  [ 0, 1671 ],
-  [ 0, 1929 ],
-  [ 0, 2036 ],
-  [ 0, 2513 ],
-  [ 0, 2720 ],
-  [ 0, 1611 ],
-  [ 0, 1581 ],
-  [ 0, 2048 ],
-  [ 0, 2422 ],
-  [ 0, 2321 ],
-  [ 0, 1185 ] ]
-*/
+stat->printHighScore("Score for input with last marble worth 100x:")
