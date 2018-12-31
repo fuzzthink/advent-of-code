@@ -2,7 +2,7 @@ open Belt
 open Util
 module BA = Belt.Array
 module JS = Js.String
-module Q = MutableQueue
+module Q = Belt.MutableQueue
 
 type node = {
   childs: array(node),
@@ -13,10 +13,10 @@ let rec toNode = item => {
   let childCnt = item->Q.popExn;
   let itemsCnt = item->Q.popExn;
   let childs = Q.make()
-  Range.forEach(1, childCnt, _ => childs->Q.add(toNode(item)));
-
+  for(_ in 1 to childCnt) childs->Q.add(toNode(item));
   let items = Q.make()
-  Range.forEach(1, itemsCnt, _ => items->Q.add(item->Q.popExn));
+  for(_ in 1 to itemsCnt) items->Q.add(item->Q.popExn);
+
   {
     childs: childs->Q.toArray,
     items: items->Q.toArray,

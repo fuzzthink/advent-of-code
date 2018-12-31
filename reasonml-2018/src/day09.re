@@ -1,4 +1,3 @@
-open Belt
 open Util
 open Int64
 module BA = Belt.Array
@@ -38,7 +37,7 @@ let gameScores = stat => {
   let scores = BA.make(stat.playersCnt, zero)
   let player = ref(0)
   let cur = ref(firstNode)
-  Range.forEach(1, stat.lastWorth, i => {
+  for (i in 1 to stat.lastWorth) {
     if (i mod 23 == 0){
       let iPlayer = player^
       let removedPts = removePrv7(cur)
@@ -48,7 +47,7 @@ let gameScores = stat => {
       cur->insertNext2(i->of_int)
     }
     player := (i+1) mod stat.playersCnt
-  });
+  };
   scores
 }
 
@@ -76,17 +75,18 @@ Js.log("Test expected scores in sample games:")
 let stats = readLines("09test")->BA.map(s => s->statParser(true))
 let scores = stats->BA.map(stat => stat->gameScores)
 scores
-  ->BA.map(scores => scores->AU.getMax64)
-  ->BA.forEachWithIndex((i, score) => {
-    let expected = (stats->BA.getExn(i)).highScore
-    let passed = score == expected
-    if (passed)
-      Js.log({j|✔ Test case $i passed|j})
-    else {
-      Js.log({j|Got $score, expected $expected, scores were|j})
-      Js.log(scores->BA.getExn(i))
-    }
-  })
+/* ->BA.map(scores => scores->AU.getMax64) */
+|>Array.map(scores => scores->AU.getMax64)
+|>Array.iteri((i, score) => {
+  let expected = (stats->BA.getExn(i)).highScore
+  let passed = score == expected
+  if (passed)
+    Js.log({j|✔ Test case $i passed|j})
+  else {
+    Js.log({j|✖ Test case $i failed - Got $score, expected $expected, scores were|j})
+    Js.log(scores->BA.getExn(i))
+  }
+})
 
 /* Real input */
 let stat = readFile("09")->statParser(false)
