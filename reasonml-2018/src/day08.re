@@ -1,7 +1,5 @@
-open Belt
 open Util
-module BA = Belt.Array
-module JS = Js.String
+open Belt.Array
 module Q = Belt.MutableQueue
 
 type node = {
@@ -16,36 +14,35 @@ let rec toNode = item => {
   for(_ in 1 to childCnt) childs->Q.add(toNode(item));
   let items = Q.make()
   for(_ in 1 to itemsCnt) items->Q.add(item->Q.popExn);
-
   {
     childs: childs->Q.toArray,
     items: items->Q.toArray,
   }
 }
 
-let getInts = day =>
-  readFile(day)
-  -> JS.split(" ", _)
-  -> BA.map(int_of_string)
+let splitToInts = str => str
+  -> Str.split(" ", _)
+  -> map(int_of_string)
 
-let sumInts = ints => ints->BA.reduce(0, (acc, e) => acc+e)
+let sumInts = ints => ints->reduce(0, (acc, e) => acc+e)
 
 let rec sumGraph = ({childs, items}) => {
   let sums = items->sumInts;
-  let childSums = childs->BA.map(sumGraph)->sumInts;
+  let childSums = childs->map(sumGraph)->sumInts;
   sums + childSums;
 }
 
 let rec sumChilds = ({childs, items}) =>
-  if (childs->BA.length==0) items->sumInts 
-  else items->BA.reduce(0, (acc, e) => 
-    switch (childs[e-1]) {
+  if (childs->length==0)
+    items->sumInts 
+  else items->reduce(0, (acc, e) => 
+    switch (childs->get(e-1)) {
     | Some(child) => acc + child->sumChilds
     | None => acc
     }
   )
 
-let root = getInts("08")->Q.fromArray->toNode
+let root = readFile("08")->splitToInts->Q.fromArray->toNode
 Js.log("Sum of meta numbers:")
 Js.log(sumGraph(root));
 Js.log("Sum of meta numbers with restrictions:")

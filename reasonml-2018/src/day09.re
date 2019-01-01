@@ -1,7 +1,6 @@
 open Util
 open Int64
-module BA = Belt.Array
-module JS = Js.String
+open Belt.Array
 
 type gameStat = {
   playersCnt: int,
@@ -42,7 +41,7 @@ let gameScores = stat => {
       let iPlayer = player^
       let removedPts = removePrv7(cur)
       let points = i->of_int->add(removedPts)
-      scores->BA.setExn(iPlayer, scores->BA.getExn(iPlayer)->add(points))
+      scores->setExn(iPlayer, scores->getExn(iPlayer)->add(points))
     } else {
       cur->insertNext2(i->of_int)
     }
@@ -53,11 +52,12 @@ let gameScores = stat => {
 
 let statParser = (str, setScore) => [@warning "-8"] {
   let Some(intStrs) = str->parseInts
-  let ints = intStrs->BA.map(int_of_string);
+  let ints = intStrs|>Array.map(int_of_string);
+  /* let ints = intStrs->map(int_of_string); */
   {
-    playersCnt: ints->BA.getExn(0),
-    lastWorth: ints->BA.getExn(1),
-    highScore: setScore? ints->BA.getExn(2)->Int64.of_int : zero,
+    playersCnt: ints->getExn(0),
+    lastWorth: ints->getExn(1),
+    highScore: setScore? ints->getExn(2)->Int64.of_int : zero,
   }
 }
 
@@ -72,19 +72,18 @@ let printHighScore = (stat, label) => {
 
 /* Sample inputs */
 Js.log("Test expected scores in sample games:")
-let stats = readLines("09test")->BA.map(s => s->statParser(true))
-let scores = stats->BA.map(stat => stat->gameScores)
+let stats = readLines("09test")->map(s => s->statParser(true))
+let scores = stats->map(stat => stat->gameScores)
 scores
-/* ->BA.map(scores => scores->AU.getMax64) */
 |>Array.map(scores => scores->AU.getMax64)
 |>Array.iteri((i, score) => {
-  let expected = (stats->BA.getExn(i)).highScore
+  let expected = (stats->getExn(i)).highScore
   let passed = score == expected
   if (passed)
     Js.log({j|✔ Test case $i passed|j})
   else {
     Js.log({j|✖ Test case $i failed - Got $score, expected $expected, scores were|j})
-    Js.log(scores->BA.getExn(i))
+    Js.log(scores->getExn(i))
   }
 })
 

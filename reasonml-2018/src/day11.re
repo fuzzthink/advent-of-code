@@ -1,6 +1,5 @@
 open Util
 open Printf
-module JS = Js.String
 
 type cfg = {
   sn: int,
@@ -89,7 +88,7 @@ let print5x5 = (mat, maxX, maxY) => {
   };
   strs[5][0] = sprintf("%2d ", maxY+3);
   fori(0, 5, x => strs[0][x] = sprintf("%3d", x0+x-1)); /* don't -1 if 1-base index */
-  strs|>Array.iter(s => s->Js.Array.joinWith("", _)->Js.log)
+  strs|>Array.iter(s => s->JA.joinWith("", _)->Js.log)
 };
 
 [|
@@ -101,9 +100,9 @@ let print5x5 = (mat, maxX, maxY) => {
   let mat = Array.make_matrix(c.ylen, c.xlen, 0);
   let (max, maxX, maxY) = mat->calcPower(c)->max3x3(c)
   Js.log(sprintf(
-    "\n------------------\nsn %d: max 3x3 is %d at %d,%d", c.sn, max, maxX-1, maxY-1))
+    "\n------------------\nsn %d: max 3x3 power is %d at %d,%d", c.sn, max, maxX-1, maxY-1))
   mat->print5x5(maxX, maxY)
   let sums = mat->summedAreaTable(c)
   let (max, maxX, maxY, len as d) = mat->maxSqr(c, sums)
-  Js.log(sprintf("max sqr is %d at %d,%d,%d sqr len", max, maxX-d+1, maxY-d+1, d))
+  Js.log(sprintf("max n*n power is %d at %d,%d,%d (%d is sqr's size)", max, maxX-d+1, maxY-d+1, d, d))
 })
