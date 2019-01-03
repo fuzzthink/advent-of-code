@@ -5,7 +5,8 @@ module JA = Js.Array
 module Str = Js.String /* "wrong file naming jS.cmi" if named module JS */
 
 let readFile = name => Node.Fs.readFileAsUtf8Sync("data/"++name++".txt")
-let readLines = name => readFile(name)->Str.split("\n", _)
+let readLines = name => readFile(name)|>Str.split("\n")
+let readLine = name => readFile(name)|>Str.split("\n")|>JA.joinWith("")
 let parseInts = str => str |> Str.match([%re "/-?[\\d]+/g"])
 let fori = Belt.Range.forEach
 
@@ -16,6 +17,7 @@ module ListUtil = {
 module LU = ListUtil
 
 module ArrayUtil = {
+  let contains = (arr, v) => arr->reduce(false, (acc, e) => acc || v==e) /* break early.. */
   let sumFloat = arr => arr->reduce(0.0, (acc, e) => acc +. e);
   let sumInt = arr => arr->reduce(0, (acc, e) => acc + e);
   let getMin = arr => arr->reduce(max_int, (acc, e) => e < acc? e: acc);
