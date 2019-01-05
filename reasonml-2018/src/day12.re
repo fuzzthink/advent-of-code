@@ -44,7 +44,7 @@ let calcPts = (str, numNegPtsChars) =>
   |>Array.mapi((i, c) => c=="#"? i-numNegPtsChars: 0)
   |>AU.sumInt
 
-let rec evolvelTil = (str, iter, iters, prvPts, prvDiff, ~dbg=false) => {
+let rec evolvelTil = (str, iter, iters, prvPts, prvDiff, ~dbg) => {
   let pads = "..." 
   let strlen = str->String.length
   let chars = pads++str++pads|>Str.split("")
