@@ -53,7 +53,6 @@ let gameScores = stat => {
 let statParser = (str, setScore) => [@warning "-8"] {
   let Some(intStrs) = str->parseInts
   let ints = intStrs|>Array.map(int_of_string);
-  /* let ints = intStrs->map(int_of_string); */
   {
     playersCnt: ints->getExn(0),
     lastWorth: ints->getExn(1),
@@ -69,7 +68,6 @@ let printHighScore = (stat, label) => {
   ->Js.log
 }
 
-
 /* Sample inputs */
 Js.log("Test expected scores in sample games:")
 let stats = readLines("09test")->map(s => s->statParser(true))
@@ -78,8 +76,7 @@ scores
 |>Array.map(scores => scores->AU.getMax64)
 |>Array.iteri((i, score) => {
   let expected = (stats->getExn(i)).highScore
-  let passed = score == expected
-  if (passed)
+  if (score == expected)
     Js.log({j|✔ Test case $i passed|j})
   else {
     Js.log({j|✖ Test case $i failed - Got $score, expected $expected, scores were|j})

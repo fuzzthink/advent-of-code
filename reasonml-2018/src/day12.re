@@ -62,7 +62,7 @@ let rec evolvelTil = (str, iter, iters, prvPts, prvDiff, ~dbg) => {
   exit
   ? (pts, diff, nextStr)
   : evolvelTil(nextStr, iter-1, iters, pts, diff, ~dbg)
-};
+}
 
 let inputStr = 
   "#........#.#.#...###..###..###.#..#....###.###.#.#...####..##..##.#####..##...#.#.....#...###.#.####";
@@ -76,8 +76,8 @@ let inputStr =
     let gen = (out->String.length - 100)/2
     let s = Int64.of_string
     let i = Int64.of_int
-    let gen50bPts = sub("50000000000"->s, gen->i)->mul(diff->i)->add(pts->i)
-    let ptstr = gen50bPts->to_string
+    let ptsAtGen50b = sub("50000000000"->s, gen->i)->mul(diff->i)->add(pts->i)
+    let ptstr = ptsAtGen50b->to_string
     Js.log({j|After 50 billion generations, pots will be worth $ptstr|j})
   }
 })

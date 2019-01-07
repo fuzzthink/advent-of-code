@@ -16,7 +16,7 @@ let calcPower = (mat, c) => {
   for (y in 0 to c.ylen-1) {
     for (x in 0 to c.xlen-1) {
       mat[y][x] = powerLv(c.sn, x, y)
-    };
+    }
   };
   mat
 }
@@ -35,7 +35,7 @@ let max3x3 = (m, c) => {
         maxX := x
         maxY := y
       }
-    };
+    }
   };
   (max^, maxX^, maxY^)
 }
@@ -48,12 +48,12 @@ let summedAreaTable = (mat, c) => {
       let prvY = y==0? 0 : sums[y-1][x]
       let prvXY = (y==0 || x==0)? 0 : sums[y-1][x-1]
       sums[y][x] = mat[y][x] + prvY + prvX - prvXY
-    };
+    }
   };
   sums
-};
+}
 
-let maxSqr = (m, c, sums) => {
+let maxSqr = (c, sums) => {
   let max = ref(-5 * c.ylen * c.xlen)
   let maxX = ref(-1)
   let maxY = ref(-1)
@@ -69,25 +69,25 @@ let maxSqr = (m, c, sums) => {
           maxY := y
           len := d
         }
-      };
-    };
+      }
+    }
   };
   (max^, maxX^, maxY^, len^)
-};
+}
 
 let print5x5 = (mat, maxX, maxY) => {
   let strs = Array.make_matrix(6, 6, "");
   let x0 = maxX > 1? maxX-2 : 0;
   let y0 = maxY > 1? maxY-2 : 0;
   for (y in y0 to y0+4) {
-    strs[y-y0][0] = sprintf("%2d ", y-1); /* don't -1 if 1-base index labels */
+    strs[y-y0][0] = sprintf("%2d ", y-1) /* don't -1 if 1-base index labels */
     for (x in x0 to x0+4) {
       let v = mat[y][x]
       strs[y-y0+1][x-x0+1] = v > 0? sprintf("  %d", v): sprintf("%3d", v)
-    };
+    }
   };
-  strs[5][0] = sprintf("%2d ", maxY+3);
-  fori(0, 5, x => strs[0][x] = sprintf("%3d", x0+x-1)); /* don't -1 if 1-base index */
+  strs[5][0] = sprintf("%2d ", maxY+3)
+  fori(0, 5, x => strs[0][x] = sprintf("%3d", x0+x-1)) /* don't -1 if 1-base index */
   strs|>Array.iter(s => s->JA.joinWith("", _)->Js.log)
 };
 
@@ -96,13 +96,18 @@ let print5x5 = (mat, maxX, maxY) => {
   {sn: 42, xlen: 300, ylen: 300},
   {sn: 9424, xlen: 300, ylen: 300},
 |]
-|>Array.iter(c => {
-  let mat = Array.make_matrix(c.ylen, c.xlen, 0);
-  let (max, maxX, maxY) = mat->calcPower(c)->max3x3(c)
+|>Array.iter(d => {
+  let mat = Array.make_matrix(d.ylen, d.xlen, 0);
+  let (max, maxX, maxY) = mat->calcPower(d)->max3x3(d)
   Js.log(sprintf(
-    "\n------------------\nsn %d: max 3x3 power is %d at %d,%d", c.sn, max, maxX-1, maxY-1))
+    "\n------------------\nsn %d: max 3x3 power is %d at %d,%d", 
+    d.sn, max, maxX-1, maxY-1
+  ))
   mat->print5x5(maxX, maxY)
-  let sums = mat->summedAreaTable(c)
-  let (max, maxX, maxY, len as d) = mat->maxSqr(c, sums)
-  Js.log(sprintf("max n*n power is %d at %d,%d,%d (%d is sqr's size)", max, maxX-d+1, maxY-d+1, d, d))
+  let sums = mat->summedAreaTable(d)
+  let (max, maxX, maxY, len) = maxSqr(d, sums)
+  Js.log(sprintf(
+    "max n*n power is %d at %d,%d,%d (%d is sqr's size)", 
+    max, maxX-len+1, maxY-len+1, len, len
+  ))
 })

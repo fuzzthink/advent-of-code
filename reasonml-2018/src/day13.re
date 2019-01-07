@@ -87,10 +87,10 @@ let removeCrashed = (carts, x, y) =>
   carts^ |>Array.to_list |>List.filter(c => c.x!=x && c.y!=y) |>Array.of_list
 
 let cartRep = cart => switch (cart.heading) {
-  | N => "^"
-  | E => ">"
-  | S => "v"
-  | _ => "<"
+  | N => {js|▲|js}
+  | E => {js|▶|js}
+  | S => {js|▼|js}
+  | _ => {js|◀|js}
 }
 let printMap = (carts, grid) => {
   grid|>Array.iteri((y, row) => {
@@ -108,8 +108,9 @@ let step = (carts, grid, dbg) => {
   carts^ |>Array.map(cart => stepCart(cart, grid)) |> ignore
   if (dbg) printMap(carts^, grid)
   carts
-};
+}
 
+let maxIters = 100000;
 [|"13test", "13"|]|>Array.iteri((input, filename) => {
   let dbg = input == 0
   let grid = readLines(filename)->parseMap
@@ -129,7 +130,7 @@ let step = (carts, grid, dbg) => {
       if (dbg) printMap(carts^, grid)
     }
     iters := iters^ + 1
-    break := carts^ |>Array.length <= 1 || iters^ >= 99999
+    break := carts^ |>Array.length <= 1 || iters^ >= maxIters
   }
   Js.log({j|After $iters steps|j})
   carts^ |>Array.iter(c => {

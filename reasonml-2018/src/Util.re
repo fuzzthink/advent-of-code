@@ -13,6 +13,7 @@ let fori = Belt.Range.forEach
 module ListUtil = {
   let getMin = lst => lst->BL.reduce(max_int, (acc, e) => e < acc? e : acc);
   let getMax = lst => lst->BL.reduce(min_int, (acc, e) => e > acc? e : acc);
+  let toStr = lst => lst->BL.toArray->JA.joinWith("", _)
 }
 module LU = ListUtil
 
@@ -27,5 +28,6 @@ module ArrayUtil = {
     |> ArrayLabels.to_list
     |> ListLabels.filter(~f)
     |> ArrayLabels.of_list;
+  let toStr = arr => arr->JA.joinWith("", _)
 }
 module AU = ArrayUtil
