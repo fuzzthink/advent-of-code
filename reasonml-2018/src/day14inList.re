@@ -1,5 +1,7 @@
 open Util
-/* List: Slower vs. Array */
+/* Failed List solution: Slower vs. array w/ Array.append,
+  so probably hrs to produce Part 1.
+*/
 
 let at = (cnts, i) => cnts->List.nth(i)
 
@@ -62,6 +64,7 @@ let initCnts = [7, 3];
   if (result == expected)
     Js.log({j|✔ Test "stop after $x" passed|j})
   else
-    Js.log({j|✖ Test "stop after $x" failed, got $result|j})
+    Js.log({j|✖ Test "stop after $x" FAIL, expected $expected, got $result|j})
 })
-stepNafterX(initCnts, 1, 0, 681901, 10, false)->Js.log
+let input = 681901 
+stepNafterX(initCnts, 1, 0, input, 10, false)->Js.log

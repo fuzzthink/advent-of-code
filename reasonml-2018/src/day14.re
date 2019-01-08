@@ -1,69 +1,103 @@
 open Util
-module Ht = Hashtbl
-
-let lenToStr = cnts => cnts->Ht.length->string_of_int
 
 let addNext = (cnts, i1, i2) => {
-  let pts = cnts->Ht.find(i1) + cnts->Ht.find(i2)
+  let pts = cnts[i1] + cnts[i2]
   let ten = pts/10
   let one = pts mod 10
-  if (ten==0)
-    cnts->Ht.add(cnts->lenToStr, one)
-  else {
-    cnts->Ht.add(cnts->lenToStr, ten)
-    cnts->Ht.add(cnts->lenToStr, one)
-  }
+  /* Performance Notes - Array.append w/
+    cnts->Array.append(ten==0? [|one|] : [|ten, one|])
+     instead of Js.Array.push below only slightly faster vs. List solution,
+     so will GC error in Part 2, and probably take hrs to calculate Part 1.
+  */
+  ignore(ten==0 ?
+    cnts|>JA.push(one) :
+    cnts|>JA.pushMany([|ten, one|])
+  )
+  cnts
 }
 
-let geti' = (cnts, pvCnts, i) => {
-  let pts = pvCnts->Ht.find(i)
+let geti' = (cnts, i) => {
+  let pts = cnts[i]
   let steps = pts + 1
-  let i' = i->int_of_string + (steps mod cnts->Ht.length);
-  (i' >= cnts->Ht.length? i' - cnts->Ht.length : i')->string_of_int
+  let i' = i + (steps mod cnts->Array.length)
+  i' >= cnts->Array.length? i' - cnts->Array.length : i'
 }
 
 let cntsRep = (cnts, i1, i2) =>
-  cnts->Ht.fold((i, c, acc) =>
-    i==i1? acc ++ "(" ++ c->string_of_int ++ ")"
-    : i==i2? acc ++ "[" ++ c->string_of_int ++ "]"
-    : acc ++ " " ++ c->string_of_int ++ " "
-  , _, "")
+  cnts|>Array.mapi((i, c) => 
+    i==i1? "(" ++ c->string_of_int ++ ")"
+    : i==i2? "[" ++ c->string_of_int ++ "]"
+    : " " ++ c->string_of_int ++ " "
+  )|>AU.toStr
 
 let rec step = (cnts, i1, i2, stop, dbg) => {
-  if (cnts->Ht.length mod 10000 == 0) Js.log(cnts->Ht.length)
-  if (cnts->Ht.length >= stop)
+  if (cnts->Array.length >= stop)
     cnts
   else {
-    cnts->addNext(i1, i2)
-    let i1' = geti'(cnts, cnts, i1)
-    let i2' = geti'(cnts, cnts, i2)
-    if (dbg) cntsRep(cnts, i1', i2')->Js.log
-    step(cnts, i1', i2', stop, dbg)
+    let cnts' = addNext(cnts, i1, i2)
+    let i1' = geti'(cnts', i1)
+    let i2' = geti'(cnts', i2)
+    if (dbg) cntsRep(cnts', i1', i2')->Js.log
+    step(cnts', i1', i2', stop, dbg)
   }
 }
 
-let stepNafterX = (cnts, i1, i2, x, n, dbg) => {
-  step(cnts, i1, i2, x+n, dbg) |> ignore
-  BA.range(x, x+n-1)|>Array.map(i =>
-    cnts->Ht.find(i->string_of_int)
-  )|>AU.toStr
-}
+let stepXandN = (cnts, i1, i2, x, n, dbg) =>
+  step(cnts, i1, i2, x+n, dbg)
+  ->BA.slice(x, n)
+  ->AU.toStr
 
-let init = cnts => {
-  cnts->Ht.add("0", 3) 
-  cnts->Ht.add("1", 7) 
-  cnts
+/* Part 2 */
+let getStr = (cnts, ptnLen, cntsLen, offset) => {
+  ptnLen+offset <= cntsLen
+  ? BA.range(cntsLen -ptnLen -offset, cntsLen -1 -offset)|>Array.map(i =>
+      cnts[i]->string_of_int
+    )|>AU.toStr
+  : ""
+}
+let rec lenBeforePtn = (cnts, i1, i2, ptn, ptnLen) => {
+  if (cnts->Array.length mod 1000000 == 0) Js.log(cnts->Array.length)
+  let s = cnts->getStr(ptnLen, cnts->Array.length, 0)
+  let t = cnts->getStr(ptnLen, cnts->Array.length, 1);
+  let found = s == ptn || t == ptn 
+  if (!found) {
+    let cnts' = cnts->addNext(i1, i2)
+    let i1' = geti'(cnts', i1)
+    let i2' = geti'(cnts', i2)
+    lenBeforePtn(cnts', i1', i2', ptn, ptnLen)
+  } 
+  else cnts->Array.length - ptnLen - (s==ptn? 0: 1)
 };
+
+let initCnts = () => Array.copy([|3, 7|]);
 [|(9, "5158916779"), (5, "0124515891"), (18, "9251071085"), (2018, "5941429882")|]
 |>Array.iter(((x, expected)) => {
   let dbg = x <= 99
-  let cnts = Ht.create(x + expected->String.length)->init
-  let result = stepNafterX(cnts, "0", "1", x, expected->String.length, dbg)
+  let result = stepXandN(initCnts(), 0, 1, x, expected->String.length, dbg)
   if (result == expected)
     Js.log({j|✔ Test "stop after $x" passed|j})
   else
-    Js.log({j|✖ Test "stop after $x" failed, got $result|j})
+    Js.log({j|✖ Test "stop after $x" FAIL, expect $expected, got $result|j})
 })
-let x = 681901 
-let cnts = Ht.create(x + 10)->init
-stepNafterX(cnts, "0", "1", x, 10, false)->Js.log
+let input = 681901
+let result = stepXandN(initCnts(), 0, 1, input, 10, false)
+Js.log({j|10 digits after first $input digits: $result|j})
+Js.log("\n");
+
+[|(9, "515891"), (5, "012451"), (18, "92510"), (2018, "59414")|]
+|>Array.iter(((expected, ptn)) => {
+  let result = lenBeforePtn(initCnts(), 0, 1, ptn, ptn->String.length)
+  if (result == expected)
+    Js.log({j|✔ Test "$expected digits before pattern $ptn" passed|j})
+  else
+    Js.log({j|✖ Test "$expected digits before pattern $ptn" FAILED, got $result|j})
+});
+
+let ptn = "681901"
+let result = lenBeforePtn(initCnts(), 0, 1, ptn, ptn->String.length)
+if (result < 1)
+  Js.log({j|"digits before pattern" NOT found!|j})
+else {
+  Js.log({j|Number of digits before pattern "$ptn"|j})
+  Js.log(result)
+}

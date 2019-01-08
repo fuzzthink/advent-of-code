@@ -1,7 +1,9 @@
 open Util
 module JD = Js.Dict
-/* Js.Dict: Slowest, ~100x slower vs. List, and
-   Couldn't get Js.Dict.entries |> map to work.. */
+/* Failed Js.Dict solution: Slowest, ~100x slower vs. List,
+   so probably days to produce Part 1.
+   Also couldn't get Js.Dict.entries |> map to work..
+*/
 
 let len = cnts => cnts->JD.entries->Array.length
 let get = cnts => cnts->JD.unsafeGet
@@ -63,8 +65,8 @@ let init = cnts => {
   if (result == expected)
     Js.log({j|✔ Test "stop after $x" passed|j})
   else
-    Js.log({j|✖ Test "stop after $x" failed, got $result|j})
+    Js.log({j|✖ Test "stop after $x" FAIL, expected $expected, got $result|j})
 })
-let x = 681901 
+let input = 681901 
 let cnts = JD.fromList([("0", 3), ("1", 7)]) 
-stepNafterX(cnts, "0", "1", x, 10, false)->Js.log
+stepNafterX(cnts, "0", "1", input, 10, false)->Js.log
