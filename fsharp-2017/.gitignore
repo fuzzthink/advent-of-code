@@ -1,0 +1,10 @@
+.fable
+.paket/.cached
+.vscode
+node_modules
+out
+paket-files
+package-lock.json
+*.code-workspace
+src/bin
+src/obj
