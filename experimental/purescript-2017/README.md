@@ -2,19 +2,17 @@
 
 ## Setup
 
+Purescript using only psc-package manager (no Bower)
+
 ```
 npm i -g purescript pulp psc-package
 psc-package install
 ```
 
-## Watch & Run
+## Running
 
 ```
 pulp --watch run
-```
-
-## Run REPL
-
-```
+pulp run
 pulp repl
 ```

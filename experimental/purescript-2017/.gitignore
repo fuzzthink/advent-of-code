@@ -1,0 +1,4 @@
+/.pulp-cache/
+/output/
+/.psc*
+/.purs-repl

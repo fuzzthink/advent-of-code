@@ -1,9 +1,9 @@
 module Main where
 
 import Prelude
-import Day01 as Day01
 import Effect (Effect)
+import Day01 as Day
 
 main :: Effect Unit
 main = do
-  Day01.run
+  Day.run
