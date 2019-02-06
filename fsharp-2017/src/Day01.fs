@@ -1,6 +1,5 @@
 module Day01
 
-open Fable.Import.Node.Exports
 open Util
 
 /// Iterate the xs chars, match each aginst the val at iCompare away.
@@ -11,8 +10,6 @@ let sumIfEqNextI xs iCompare =
           @ (xi |> Seq.take iCompare |> Seq.toList)
   (xi, xi') ||> List.map2 (fun a b -> if a=b then a else 0) |> List.sum
     
-let run () =
-  let buf = fs.readFileSync "data/01.txt"
-  let str = sprintf "%A" buf
+let run (str:string) =
   printfn "Day 1-1 answer: %A" <| sumIfEqNextI str 1
   printfn "Day 1-2 answer: %A" <| sumIfEqNextI str (str.Length/2)

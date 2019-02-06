@@ -1,3 +1,5 @@
 module App
 
-Day01.run()
+open Fable.Import.Node.Exports
+
+Day02.run ("data/02.txt" |> fs.readFileSync |> sprintf "%A")
