@@ -8,3 +8,4 @@ package-lock.json
 *.code-workspace
 src/bin
 src/obj
+scratch
