@@ -17,9 +17,16 @@ This also serves as an example app of run FSharp with Fable utilizing only Nodej
 - `npm start` to compile and watch with fable-splitter.
 - `npm run build` - same but outputs javascript to `/out`.
 
-## Add F# Modules
+## Adding Modules
 
-While fable-splitter is watching with one of above `npm` commands:
+While fable-splitter is watching with one of above watch commands:
+
+### new src
+- To add `DayXX.fs`, change `App.fs` to run it.
+- If editor say unable to find modules like Util (eg. vscode), need to re-save `App.fsporj`.
+
+### new Library
+
 - Add `nuget ModuleName` to paket.dependencies and run paket install command above.
 - Add `ModuleName` to src/paket.references (referenced in `App.fsporj`).
 
