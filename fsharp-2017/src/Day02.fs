@@ -12,8 +12,8 @@ let maxDiv (xs:int[]) =
       if a <> b && a % b = 0 then yield a / b
   ] |> List.head
     
-let run (str:string) =
-  let xss = splitLineBy int '\t' str
+let run (instr:string) =
+  let xss = instr |> splitLineAndBy '\t' int
   // +1 for compiler suggesting Array.sumBy instead of: let sumOf f xss = xss
   //   |> Array.map (fun xs -> f xs)
   //   |> Array.sum 

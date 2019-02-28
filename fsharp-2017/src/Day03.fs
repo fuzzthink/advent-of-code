@@ -44,7 +44,7 @@ let spiralNumAfter n =
     next <- nextSpiralNum a
   next
 
-let run (s:string) =
-  let n = int s
+let run (instr:string) =
+  let n = int instr
   printfn "Day 3-1 answer: %A" <| distTo1 n
   printfn "Day 3-2 answer: %A" <| spiralNumAfter n

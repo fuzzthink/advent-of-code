@@ -1,8 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "start": "npx fable-splitter src/ -w --run",
-    "build": "npx fable-splitter src/ -w --run -o out/",
+    "start": "npx fable-splitter src/ --run -w",
+    "fable": "npx fable-splitter src/ --run",
+    "build": "npx fable-splitter src/ --run -o out/",
+    "watch": "npx fable-splitter src/ --run -o out/ -w",
     "paket-i": "mono .paket/paket.exe install"
   },
   "dependencies": {
