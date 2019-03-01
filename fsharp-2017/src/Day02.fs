@@ -13,7 +13,7 @@ let maxDiv (xs:int[]) =
   ] |> List.head
     
 let run (instr:string) =
-  let xss = instr |> splitLineAndBy '\t' int
+  let xss = instr |> mapSplitLineAnd '\t' int
   // +1 for compiler suggesting Array.sumBy instead of: let sumOf f xss = xss
   //   |> Array.map (fun xs -> f xs)
   //   |> Array.sum 
