@@ -15,7 +15,7 @@ let step2 (a:int[], i:int) =
 let doSteps (a:int[]) stepper = 
   let mutable i = stepper (a, 0)
   let mutable steps = 1
-  while i < Array.length a do
+  while i < a.Length do
     i <- stepper (a, i)
     steps <- steps + 1
   steps

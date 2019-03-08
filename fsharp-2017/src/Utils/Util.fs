@@ -2,6 +2,8 @@ module Util
 
 let charToInt (c:char) = int c - int '0'
 
+let splitInt (c:char) (str:string) = str.Split c |> Array.map int 
+
 let splitLine (str:string) = str.Split '\n'
 
 let mapSplitLine f (str:string) = str.Split '\n' |> Array.map f
