@@ -4,17 +4,17 @@ open Util
 open System
 
 let hasDup(a:string[]) : bool =
-  let mutable tmp = set []
+  let mutable seen = set []
   a |> Array.exists (fun s ->
-    if not (tmp.Contains s) then tmp <- tmp.Add s; false
+    if not (seen.Contains s) then seen <- seen.Add s; false
     else true
   )
 
 let hasAnagram(a:string[]) : bool =
-  let mutable tmp = set []
+  let mutable seen = set []
   a |> Array.exists (fun s ->
     let hash = s |> Seq.sort |> String.Concat
-    if not (tmp.Contains hash) then tmp <- tmp.Add hash; false
+    if not (seen.Contains hash) then seen <- seen.Add hash; false
     else true
   )
 

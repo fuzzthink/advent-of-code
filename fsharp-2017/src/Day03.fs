@@ -28,7 +28,7 @@ let nextSpiralNum (xs:ResizeArray<int>) =
   let i = i0 + (edgeLen - 2)*(if isLast || dToCnr' > 0 then edges - 1 else edges) + eps
 
   let v0is0 = (dToCnr' = 0 && not isLast) || dToCnr' = 1 || (dToCnr' = 2 && edges = 1)
-  // v0 | v1 = val at i | v2 | v3 = val at 2 index back from val to compute
+  // v0 ; v1 = val at i ; v2 ; v3 = val at 2 index back from val to compute
   let v0 = if v0is0 then 0 else if len' = 1 then 0 else xs.[i-1]
   let v1 = if len' = 1 then 0 else xs.[i]
   let v2 = if dToCnr' = 0 || (dToCnr' = edgeLen - 1 && edges < 4) then 0 else xs.[i+1]
