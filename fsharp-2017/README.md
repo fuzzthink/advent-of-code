@@ -13,7 +13,8 @@ This also serves as an example app of run FSharp with Fable utilizing only Nodej
 ## Building and running the app
 
 - `npm i` to install JS dependencies
-- `npm run paket-i` to install F# dependencies (`.paket/paket.exe install` on Windows)
+- `npm run paket-i` to paket install F# dependencies (`.paket/paket.exe install` on Windows)
+
 - `npm start` to compile and watch
 - `npm run watch` - same but outputs javascript to `/out`
 - `npm run build` - same but no watch

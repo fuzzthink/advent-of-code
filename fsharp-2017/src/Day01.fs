@@ -7,8 +7,9 @@ open Util
 let sumIfEqNextI str iCompare = 
   let l = str |> Seq.map charToInt |> Seq.toList
   let l' = (l |> Seq.skip iCompare |> Seq.toList)
-          @ (l |> Seq.take iCompare |> Seq.toList)
-  (l, l') ||> List.map2 (fun a b -> if a=b then a else 0) |> List.sum
+         @ (l |> Seq.take iCompare |> Seq.toList)
+  (l, l') ||> List.map2 (fun a b -> if a=b then a else 0)
+           |> List.sum
     
 let run (instr:string) =
   printfn "Day 1-1 answer: %A" <| sumIfEqNextI instr 1
