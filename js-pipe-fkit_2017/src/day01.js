@@ -18,8 +18,8 @@ const sumIfEqNextI = (iCompare, l) => {
 
 const strToInts = s => s.split('') |> map(Number)
 
-module.exports = (input, log) => {
-  const data = strToInts(input)
+module.exports = (inStr, log) => {
+  const data = strToInts(inStr)
   log.p1( sumIfEqNextI(1, data) )
   log.p2( sumIfEqNextI(data.length/2, data) )
 }
