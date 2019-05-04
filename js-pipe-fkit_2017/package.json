@@ -1,0 +1,29 @@
+{
+  "name": "aoc_js-2017_pipe-fkit-pampy",
+  "version": "1.0.0",
+  "description": "Advent of Code 2017 in functional javascript w/ |>, fkit and pampy",
+  "author": "John Leung",
+  "scripts": {
+    "watch": "babel src --out-dir dist --watch",
+    "start": "node dist"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-proposal-pipeline-operator": "^7.3.2"
+  },
+  "devDependencies": {
+    "fkit": "^3.4.0",
+    "pampy": "0.0.6"
+  },
+  "babel": {
+    "plugins": [
+      [
+        "@babel/plugin-proposal-pipeline-operator",
+        {
+          "proposal": "minimal"
+        }
+      ]
+    ]
+  }
+}
