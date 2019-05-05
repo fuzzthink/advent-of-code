@@ -1,4 +1,5 @@
-const { maximum, minimum, fold, map } = require('fkit')
+const { maximum, minimum, fold } = require('fkit')
+const { strToInts2D } = require('./helpers')
 
 let maxDiff = xs => maximum(xs) - minimum(xs)
 
@@ -11,10 +12,6 @@ let maxDiv = xs /*[int]*/ => {
       if (a != b && a%b == 0) return a / b
   throw Error(`No a/b == 0 in ${xs}`)
 } 
-
-const strToInts2D = s =>
-  s.split('\n')
-  |> map(s => s.split('\t') |> map(Number))
 
 module.exports = (inStr, log) => {
   const xss = strToInts2D(inStr)
