@@ -8,9 +8,11 @@ const strToInts2D = s =>
   |> map(s => s.split('\t') |> map(Number))
 
 const charsStrToInts = s => s.split('') |> map(Number)
+const strToInts = s => s.split('\n') |> map(Number)
 
 module.exports = {
   strToInts2D,
   strToWords2D,
   charsStrToInts,
+  strToInts,
 }
