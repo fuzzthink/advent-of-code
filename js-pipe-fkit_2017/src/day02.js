@@ -1,16 +1,11 @@
 const { maximum, minimum, fold, map } = require('fkit')
 
-/**
- * @params {[int]} xs 
- * @returns {int} difference of max vs. min in xs 
- */
 let maxDiff = xs => maximum(xs) - minimum(xs)
 
 /**
- * @params {[int]} xs 
  * @returns {int} 1st result of division of ints in xs where reminder is 0
  */
-let maxDiv = xs => {
+let maxDiv = xs /*[int]*/ => {
   for (let a of xs)
     for (let b of xs)
       if (a != b && a%b == 0) return a / b

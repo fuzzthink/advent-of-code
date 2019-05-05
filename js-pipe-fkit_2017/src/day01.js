@@ -1,13 +1,10 @@
 const { take, concat, drop, map, zipWith, sum } = require('fkit')
 
 /** 
- * Sum ints in l if cur int == int at cur + iCompare
- * iCompare wraps to begining of l.
- * @param {int} iCompare
- * @param {[int]} l
+ * Sum ints in l if cur int == int at cur + iCompare (wraps to begining)
  * @returns {int}
  */
-const sumIfEqNextI = (iCompare, l) => {
+const sumIfEqNextI = (iCompare, l)/*int,[int]*/ => {
   let l2 = concat(
     l |> drop(iCompare),
     l |> take(iCompare)
