@@ -10,12 +10,12 @@ const strToInts2D = (s, sep='\t') =>
 const charsStrToInts = s => s.split('') |> map(Number)
 const strToInts = (s, sep='\n') => s.split(sep) |> map(Number)
 
-const len = o => Object.keys(o).length
+const objLen = o => Object.keys(o).length
 
 module.exports = {
   strToInts2D,
   strToWords2D,
   charsStrToInts,
   strToInts,
-  len,
+  objLen,
 }

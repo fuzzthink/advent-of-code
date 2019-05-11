@@ -1,5 +1,5 @@
 const { maximum } = require('fkit')
-const { len, strToInts } = require('./helpers')
+const { objLen, strToInts } = require('./helpers')
 
 const zeroAt = idx => a /*int,[int]*/ => a.map((x, i) => i==idx? 0: x)
 const mapAdd = n => a /*int,[int]*/ => a.map(x => x + n)
@@ -30,16 +30,18 @@ const alloc = a /*[int]*/ => {
 
 /// returns Number of allocations needed for array a
 const cntAllocs = (a, hist) /*[int],{}*/ =>
-  hist[hash(a)]? len(hist): cntAllocs(alloc(a), setHash(hist, true, a))
+  hist[hash(a)]? objLen(hist): cntAllocs(alloc(a), setHash(hist, true, a))
 
 /// return Number of allocations between first time array a is repeated
-const cntPrvSeen = (a, hist) /*[int],{}*/ => {
+const countPrvSeen = (a, hist) /*[int],{}*/ => {
   const i = hist[hash(a)]
-  return i != null? len(hist)-i: cntPrvSeen(alloc(a), setHash(hist, len(hist), a))
+  return i != null
+    ? objLen(hist)-i
+    : countPrvSeen(alloc(a), setHash(hist, objLen(hist), a))
 }
 
 module.exports = (inStr, log) => {
   const ints = strToInts(inStr, '\t')
   log.p1( cntAllocs(ints, {}) )
-  log.p2( cntPrvSeen(ints, {}) )
+  log.p2( countPrvSeen(ints, {}) )
 }
