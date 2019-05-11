@@ -16,11 +16,10 @@ const parseNode = str => {
 }
 
 const mapNodes = (toMaps=[], mapped={}) => {
-  const moreToMap = toMaps.filter(toMap => {
+  const toMaps_ = toMaps.filter(toMap => {
     const leafs = toMap.leafs.filter(leaf => {
       if (mapped[leaf] != null) {
-        if (toMap.lv <= mapped[leaf])
-          toMap.lv += 1
+        toMap.lv += (toMap.lv <= mapped[leaf])? 1: 0
         return false
       }
       return true
@@ -32,8 +31,8 @@ const mapNodes = (toMaps=[], mapped={}) => {
     }
     return true
   })
-  return moreToMap.length
-    ? mapNodes(moreToMap, mapped)
+  return toMaps_.length
+    ? mapNodes(toMaps_, mapped)
     : mapped
 }
 
@@ -42,23 +41,23 @@ const getRootLabel = nodesMap =>
   |> maximumBy((a, b) => a[1] > b[1])
   |> get(0)
 
-const getDesiredWt = (branches=[], wts={}, allWts={}) => {
+const getDesiredWt = (branches=[], wts={}, orgWts={}) => {
   while (objLen(wts)) {
-    for (let branch of branches) for (let leaf of branch.leafs) {
-      if (wts[leaf] != null) {
-        const wt = wts[leaf]
-        if ( !branch.leafWts.length || branch.leafWts.includes(wt) ) {
-          branch.leafWts.push( wt )
-          branch.leafs = branch.leafs.filter(l => l != leaf)
-          if (!branch.leafs.length) {
-            wts[branch.label] = (branch.leafWts |> sum) + branch.wt
-            branches = branches.filter(b => b.label != branch.label)
-            break
+    for (let branch of branches) if (!wts[branch.label]) {
+      const leafs = branch.leafs
+      const leafWts = branch.leafWts
+      if (leafs.length > leafWts.length) for (let leaf of branch.leafs) {
+        if (wts[leaf] != null) {
+          const wt = wts[leaf]
+          if ( leafWts.length == 0 || leafWts[0] == wt ) {
+            leafWts.push(wt)
+            if (leafs.length == leafWts.length) {
+              wts[branch.label] = sum(leafWts) + branch.wt
+              break
+            }
           }
-        }
-        else if ( !branch.leafWts.includes(wt) ) {
-          const leafWt = branch.leafWts[0]
-          return allWts[leafWt] - wt - branch.leafWts[0]
+          else if ( leafWts[0] != wt )
+            return orgWts[leaf] - (wt - leafWts[0])
         }
       }
     }
