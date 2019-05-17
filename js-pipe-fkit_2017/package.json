@@ -5,7 +5,8 @@
   "author": "John Leung",
   "scripts": {
     "watch": "babel src --out-dir dist --watch",
-    "start": "node dist"
+    "start": "node dist",
+    "test": "npx mocha --reporter spec --recursive"
   },
   "dependencies": {
     "@babel/cli": "^7.4.4",
@@ -14,7 +15,9 @@
   },
   "devDependencies": {
     "fkit": "^3.4.0",
-    "pampy": "0.0.6"
+    "mocha": "^6.1.4",
+    "pampy": "0.0.6",
+    "should": "^13.2.3"
   },
   "babel": {
     "plugins": [
