@@ -40,8 +40,9 @@ const countPrvSeen = (a, hist) /*[int],{}*/ => {
     : countPrvSeen(alloc(a), setHash(hist, objLen(hist), a))
 }
 
-module.exports = (inStr, log) => {
+const run = (inStr, log) => {
   const ints = strToInts(inStr, '\t')
   log.p1( cntAllocs(ints, {}) )
   log.p2( countPrvSeen(ints, {}) )
 }
+module.exports = { run }

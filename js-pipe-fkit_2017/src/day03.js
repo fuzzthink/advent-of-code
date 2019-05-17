@@ -45,8 +45,9 @@ const spiralNumAfter = n /*int*/ => {
   return next
 }
 
-module.exports = (inStr, log) => {
+const run = (inStr, log) => {
   const n = Number(inStr)
   log.p1(n |> distTo1)
   log.p2(n |> spiralNumAfter)
 }
+module.exports = { run }

@@ -23,8 +23,9 @@ const doSteps = (stepper, ints) /*fn,[int]*/ => {
   return steps
 } 
 
-module.exports = (inStr, log) => {
+const run = (inStr, log) => {
   const ints = strToInts(inStr)
   log.p1( doSteps(step, ints))
   log.p2( doSteps(step2, ints))
 }
+module.exports = { run }

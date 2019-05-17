@@ -13,4 +13,4 @@ const log = {
 }
 
 const data = fs.readFileSync(`data/${day}.txt`, 'utf8')
-require(`./day${day}`)(data, log)
+require(`./day${day}`).run(data, log)

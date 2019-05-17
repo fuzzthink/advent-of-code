@@ -16,8 +16,9 @@ const notInAry = (f, strs) => {
 
 const countValids = (f, aa) => (aa |> filter(f)).length
 
-module.exports = (inStr, log) => {
+const run = (inStr, log) => {
   const aa = strToWords2D(inStr)
   log.p1( countValids( noDups, aa))
   log.p2( countValids( noAnagrams, aa))
 }
+module.exports = { run }

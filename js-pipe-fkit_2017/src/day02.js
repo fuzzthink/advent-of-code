@@ -13,8 +13,9 @@ let maxDiv = xs /*[int]*/ => {
   throw Error(`No a/b == 0 in ${xs}`)
 } 
 
-module.exports = (inStr, log) => {
+const run = (inStr, log) => {
   const xss = strToInts2D(inStr)
   log.p1(xss |> fold((a, xs) => a + maxDiff(xs), 0))
   log.p2(xss |> fold((a, xs) => a + maxDiv(xs), 0))
 }
+module.exports = { run }
