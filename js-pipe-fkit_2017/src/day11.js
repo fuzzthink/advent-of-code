@@ -9,41 +9,23 @@ const getSteps = dir => {
   let ne = dir.ne - dir.sw
   let nw = dir.nw - dir.se
   let n = dir.n - dir.s
-  if (ne > 0 && nw > 0) {
-    const n_ = min(ne, nw)
-    n += n_
-    ne -= n_
-    nw -= n_
-  }
-  else if (ne < 0 && nw < 0) {
-    const n_ = max(ne, nw)
-    n += n_
-    ne -= n_
-    nw -= n_
-  }
-  if (n > 0 && ne < 0) {
-    const delta = min(n, -ne)
-    n -= delta
-    ne += delta
-    nw += delta
-  }
-  else if (n > 0 && nw < 0) {
-    const delta = min(n, -nw)
-    n -= delta
-    nw += delta
-    ne += delta
-  }
-  else if (n < 0 && ne > 0) {
-    const delta = min(-n, ne)
+  if ((ne > 0 && nw > 0) || (ne < 0 && nw < 0)) {
+    const delta = ne > 0 && nw > 0? min(ne, nw): max(ne, nw)
     n += delta
     ne -= delta
     nw -= delta
   }
-  else if (n < 0 && nw > 0) {
-    const delta = min(-n, nw)
+  if ((n > 0 && ne < 0) || (n > 0 && nw < 0)) {
+    const delta = min(n, ne < 0? -ne : -nw)
+    n -= delta
+    ne += delta
+    nw += delta
+  }
+  else if ((n < 0 && ne > 0) || (n < 0 && nw > 0)) {
+    const delta = min(-n, ne > 0? ne : nw)
     n += delta
-    nw -= delta
     ne -= delta
+    nw -= delta
   }
   return Math.abs(n) + Math.abs(ne) + Math.abs(nw) 
 } 
