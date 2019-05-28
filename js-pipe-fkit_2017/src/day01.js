@@ -18,8 +18,11 @@ const strToInts = s => s.split('') |> map(Number)
 
 const run = (inStr, log) => {
   const ints = charsStrToInts(inStr)
-  log.p1( sumIfEqNextI(1, ints))
-  log.p2( sumIfEqNextI(ints.length/2, ints))
+  log.p1( sumIfEqNextI(1, ints)) // 1393
+  log.p2( sumIfEqNextI(ints.length/2, ints)) // 1292
 }
-module.exports = { run }
+module.exports = {
+  run,
+  sumIfEqNextI,
+}
   

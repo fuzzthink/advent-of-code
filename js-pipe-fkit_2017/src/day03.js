@@ -7,7 +7,7 @@ const distTo1 = n /*int*/ => {
   const sr = (n - 1) |> sqrtFloor |> minus1IfEven
   const minDist = ~~(sr/2) + 1
   const eps = Math.abs((n - sr*sr) % (minDist * 2) - minDist)
-  return minDist + eps
+  return n==1? 0 : minDist + eps
 }
 
 /// Part 2 Observation:
@@ -47,7 +47,10 @@ const spiralNumAfter = n /*int*/ => {
 
 const run = (inStr, log) => {
   const n = Number(inStr)
-  log.p1(n |> distTo1)
-  log.p2(n |> spiralNumAfter)
+  log.p1(n |> distTo1) // 430
+  log.p2(n |> spiralNumAfter) // 312453
 }
-module.exports = { run }
+module.exports = {
+  run,
+  distTo1,
+}

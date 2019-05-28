@@ -50,7 +50,7 @@ const charsRemoved = {
   expected: [0, 17, 3, 2, 0, 0, 10 ]
 }
 
-describe('countGroups()', () => {
+describe('Day 09: countGroups()', () => {
   counts.data.map((s, i) => {
     const expected = counts.expected[i]
     it(`of ${s} = ${expected}`, () => {
@@ -59,7 +59,7 @@ describe('countGroups()', () => {
   })
 })
 
-describe('getScore()', () => {
+describe('Day 09: getScore()', () => {
   scores.data.map((s, i) => {
     const expected = scores.expected[i]
     it(`of ${s} = ${expected}`, () => {
@@ -68,7 +68,7 @@ describe('getScore()', () => {
   })
 })
 
-describe('countGroups()', () => {
+describe('Day 09: countGroups()', () => {
   charsRemoved.data.map((s, i) => {
     const expected = charsRemoved.expected[i]
     it(`of ${s} = ${expected}`, () => {

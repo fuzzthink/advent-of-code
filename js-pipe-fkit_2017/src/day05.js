@@ -25,7 +25,12 @@ const doSteps = (stepper, ints) /*fn,[int]*/ => {
 
 const run = (inStr, log) => {
   const ints = strToInts(inStr)
-  log.p1( doSteps(step, ints))
-  log.p2( doSteps(step2, ints))
+  log.p1( doSteps(step, ints))  // 372139
+  log.p2( doSteps(step2, ints)) // 29629538
 }
-module.exports = { run }
+module.exports = {
+  run,
+  doSteps,
+  step,
+  step2,
+}

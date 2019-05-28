@@ -42,7 +42,7 @@ const countPrvSeen = (a, hist) /*[int],{}*/ => {
 
 const run = (inStr, log) => {
   const ints = strToInts(inStr, '\t')
-  log.p1( cntAllocs(ints, {}) )
-  log.p2( countPrvSeen(ints, {}) )
+  log.p1( cntAllocs(ints, {}) )    // 3156
+  log.p2( countPrvSeen(ints, {}) ) // 1610
 }
 module.exports = { run }

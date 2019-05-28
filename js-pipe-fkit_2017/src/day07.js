@@ -75,15 +75,23 @@ const parseAndPartition = inStr => {
   return [singles, branches, nodes]
 }  
   
-module.exports = (inStr, log) => {
+const run = (inStr, log) => {
   let singles, branches, nodes
 
   [singles, branches, nodes] = parseAndPartition(inStr)
   const mapped = toObject(singles, 0)
-  log.p1( mapNodes(branches, mapped) |> getRootLabel );
+  log.p1( mapNodes(branches, mapped) |> getRootLabel ) // airlri
 
   [singles, branches, nodes] = parseAndPartition(inStr)
   const singleWts = toObject(singles)
   const allWts = toObject(nodes)
-  log.p2( getDesiredWt(branches, singleWts, allWts) )
+  log.p2( getDesiredWt(branches, singleWts, allWts) )  // 1206
+}
+module.exports = {
+  run,
+  parseAndPartition,
+  toObject,
+  mapNodes,
+  getDesiredWt,
+  getRootLabel,
 }

@@ -18,7 +18,12 @@ const countValids = (f, aa) => (aa |> filter(f)).length
 
 const run = (inStr, log) => {
   const aa = strToWords2D(inStr)
-  log.p1( countValids( noDups, aa))
-  log.p2( countValids( noAnagrams, aa))
+  log.p1( countValids(noDups, aa))  // 466
+  log.p2( countValids(noAnagrams, aa)) // 251
 }
-module.exports = { run }
+module.exports = {
+  run,
+  countValids,
+  noDups,
+  noAnagrams,
+}

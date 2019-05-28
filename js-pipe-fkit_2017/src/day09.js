@@ -26,8 +26,8 @@ const charsInComment = str => {
 }
 
 const run = (inStr, log) => {
-  log.p1( getGroupStr(inStr) |> getScore )
-  log.p2( charsInComment(inStr) )
+  log.p1( getGroupStr(inStr) |> getScore ) // 11898
+  log.p2( charsInComment(inStr) ) // 5601
 }
 
 module.exports = {

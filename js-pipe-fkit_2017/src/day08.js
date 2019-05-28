@@ -24,7 +24,12 @@ const run = (inStr, log) => {
   const insts = inStr.split('\n') |> map(parseInst)
   const vars = initVars(insts)
   const intermediaries = insts.map(inst => runInst(inst, vars))
-  log.p1( Object.values(vars) |> maximum )
-  log.p2( intermediaries |> maximum )
+  log.p1( Object.values(vars) |> maximum ) // 4416
+  log.p2( intermediaries |> maximum ) // 5199
 }
-module.exports = { run }
+module.exports = {
+  run,
+  initVars,
+  runInst,
+  parseInst,
+}
