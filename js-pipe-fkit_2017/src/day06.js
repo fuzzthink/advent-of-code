@@ -29,8 +29,8 @@ const alloc = a /*[int]*/ => {
 }
 
 /// returns Number of allocations needed for array a
-const cntAllocs = (a, hist) /*[int],{}*/ =>
-  hist[hash(a)]? objLen(hist): cntAllocs(alloc(a), setHash(hist, true, a))
+const countAllocs = (a, hist) /*[int],{}*/ =>
+  hist[hash(a)]? objLen(hist): countAllocs(alloc(a), setHash(hist, true, a))
 
 /// return Number of allocations between first time array a is repeated
 const countPrvSeen = (a, hist) /*[int],{}*/ => {
@@ -42,7 +42,11 @@ const countPrvSeen = (a, hist) /*[int],{}*/ => {
 
 const run = (inStr, log) => {
   const ints = strToInts(inStr, '\t')
-  log.p1( cntAllocs(ints, {}) )    // 3156
+  log.p1( countAllocs(ints, {}) )  // 3156
   log.p2( countPrvSeen(ints, {}) ) // 1610
 }
-module.exports = { run }
+module.exports = {
+  run,
+  countAllocs,
+  countPrvSeen,
+}
