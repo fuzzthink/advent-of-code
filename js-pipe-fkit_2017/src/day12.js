@@ -1,11 +1,9 @@
 const { map } = require('fkit')
 
-const emptyConn = { src: '', nodes: [] }
 const parseConn = str => {
   const [src, nodesStr] = str.split(' <-> ')  
   const nodes = nodesStr.split(', ')  
-  const isSelf = nodes.length==1 && (src == nodes[0])
-  return isSelf? emptyConn : { src, nodes }
+  return { src, nodes }
 }
 
 const parseConns = inStr => {
@@ -39,11 +37,34 @@ const countConnsToNode = x => connMap => {
 }
 const countConnsToNode0 = countConnsToNode('0')
 
+const countGroups = connMap => {
+  let toVisit = Object.keys(connMap)
+  let groupsCnt = 0
+  while (toVisit.length) {
+    const x = toVisit[0]
+    const mapped = new Set([x])
+    let prvMappedLen = 0
+    while (mapped.size > prvMappedLen) {
+      prvMappedLen = mapped.size
+      toVisit = toVisit.filter(node => {
+        const canMap = connMap[node].find(src => mapped.has(src))
+        if (canMap)
+          mapped.add(node)
+        return !canMap
+      })
+    }
+    groupsCnt += 1
+  }
+  return groupsCnt
+}
+
 const run = (inStr, log) => {
-  log.p1( inStr |> parseConns |> countConnsToNode0 )
+  log.p1( inStr |> parseConns |> countConnsToNode0 ) // 306
+  log.p2( inStr |> parseConns |> countGroups ) // 200
 }
 module.exports = { 
   run,
   parseConns,
   countConnsToNode,
+  countGroups,
 }
