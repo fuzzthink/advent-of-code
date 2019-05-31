@@ -5,4 +5,5 @@
 - `npm i` - install dependencies
 - `npm run watch` - Watch and build dist
 - `day=XX npm start` - where XX is the day. Eg. `day=01 npm start` runs day01 
-- `npm test test/XX.js` - where XX is the day, if test is available.
+- `npm test test/XX.js` - where XX is the day
+- `npm test` - run all tests

@@ -13,13 +13,17 @@ const strToInts = (s, sep='\n') => s.split(sep) |> map(Number)
 
 const objLen = o => Object.keys(o).length
 
-const printRuntime = (v, t0, suf='total runtime') => {
+const printRuntime = (v, t0, suf='total runtime', sep=': ') => {
   t1 = performance.now()
   const secs = ~~((t1 - t0)/1000)
-  const hh = (~~(secs/3600)).toString().padStart(2, '0')
-  const mm = (~~(secs/60 % 60)).toString().padStart(2, '0')
-  const ss = (~~(secs % 60)).toString().padStart(2, '0')
-  console.log(`${v} - ${hh}:${mm}:${ss} ${suf}`)
+  if (!secs)
+    console.log(`${v}${sep}${~~(t1 - t0)}ms ${suf}`)
+  else {
+    const hh = (~~(secs/3600)).toString().padStart(2, '0')
+    const mm = (~~(secs/60 % 60)).toString().padStart(2, '0')
+    const ss = (~~(secs % 60)).toString().padStart(2, '0')
+    console.log(`${v}${sep}${hh}:${mm}:${ss} ${suf}`)
+  }
 }
 
 module.exports = {

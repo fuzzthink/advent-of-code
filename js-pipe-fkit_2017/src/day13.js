@@ -17,26 +17,22 @@ const parseMaxes = str => {
   }, [])
 }
 
-const initState = lvs => ({
-  scan: lvs.reduce((a, lv) => ({...a, [lv]: 0}), {}),
-  isUp: lvs.reduce((a, lv) => ({...a, [lv]: true}), {}),
-})
-
-const calcScanPosition = (len, cycles) => {
+/**
+ * @return {Boolean} if ptr will be at pos 0 after n cycles in len-length segment
+ * where ptr swings back and forth in the segment.
+ */
+const at0when = (len, cycles) => {
   const period = len * 2 -2
   const at = cycles % period
-  return at < len? at : len -(at % len) -2 
+  return (at < len? at : len -(at % len) -2) == 0 
 }
 
 const pathCost = inStr => {
   const maxes = parseMaxes(inStr)
-  const lvs = Object.keys(maxes)
-  const state = initState(lvs)
   let at = 0
   let cost = 0
   while (at < maxes.length) {
-    state.scan[at] = calcScanPosition(maxes[at], at)
-    if (state.scan[at]==0)
+    if (at0when(maxes[at], at))
       cost += at * maxes[at]
     at += 1
   }
@@ -44,6 +40,41 @@ const pathCost = inStr => {
 }
 
 const delayNeeded = inStr => {
+  const maxes = parseMaxes(inStr)
+  let delay = 0
+  let canPass = false
+  let at
+  const t0 = performance.now()
+  while (!canPass) {
+    at = 0
+    while (at < maxes.length) {
+      if (at0when(maxes[at], at + delay))
+        break
+      at += 1
+    }
+    canPass = at == maxes.length
+    delay += canPass? 0 : 1
+  }
+  printRuntime('part 2 runtime', t0, '')
+  return delay
+}
+
+const run = (inStr, log) => {
+  log.p1( pathCost(inStr)) // 1840
+  log.p2( delayNeeded(inStr)) // 3850260
+}
+
+/** p2 took .560 sec. It took 1:43:08 or 6188 secs (~11,000x) if initState is
+ *   called 3850260 x. This was already a great improvement over a version where
+ *   state change is played out instead of just checking if ptr is at 0 in at0when.
+ *  This worst version probably takes 100-1000x of 1:43:08 since it started 
+ *   slower and each delay loop took longer due to memory/GC.
+ */   
+const initState = lvs => ({ /// ~1.6ms (6188 / 3850260)
+  scan: lvs.reduce((a, lv) => ({...a, [lv]: 0}), {}),
+  isUp: lvs.reduce((a, lv) => ({...a, [lv]: true}), {}),
+})
+const delayNeeded_poor_perf = inStr => {
   const maxes = parseMaxes(inStr)
   const lvs = Object.keys(maxes)
   const t0 = performance.now()
@@ -53,12 +84,11 @@ const delayNeeded = inStr => {
   let state, at
   if (printTime)
     console.log('Calculating Part 2:\nDelay at')
-
   while (!canPass) {
     state = initState(lvs)
     at = 0
     while (at < maxes.length) {
-      state.scan[at] = calcScanPosition(maxes[at], at + delay)
+      state.scan[at] = calcScanPosition(maxes[at], at + delay) // same as at0when but returns index instead
       if (state.scan[at]==0)
         break
       at += 1
@@ -71,10 +101,6 @@ const delayNeeded = inStr => {
   return delay
 }
 
-const run = (inStr, log) => {
-  log.p1( pathCost(inStr)) // 1840
-  log.p2( delayNeeded(inStr)) // 3850260 - 01:43:08 total runtime
-}
 module.exports = {
   run,
   pathCost,
