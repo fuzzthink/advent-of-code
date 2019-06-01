@@ -1,4 +1,5 @@
 const { reverse, map } = require('fkit')
+const { _0to } = require('./helpers')
 
 /**
  * @return {[int]} of a[frm..frm+cnt] reversed
@@ -10,7 +11,7 @@ const reverseAt = (frm, cnt, a) /*int,int,[int]*/ =>
   ) |> reverse
 
 const genSparseHash = (lens, list, iList=0, skip=0, returnMeta=false) => {
-  list = list || [...Array(256).keys()]
+  list = list || _0to(256)
   if (lens.length == 0)
     return returnMeta? [list, iList, skip] : list
   else {
@@ -39,11 +40,11 @@ const mapASCII = s => [...s].map(s => s.charCodeAt())
  */
 const knotHash = (inStr, list=[], iList=0, skip=0, rounds=64) => {
   let lens = [...mapASCII(inStr), 17, 31, 73, 47, 23 ]
-  list = list.length? list : [...Array(256).keys()]
+  list = list.length? list : _0to(256)
   for (let i=0; i <rounds; i++) {
     [list, iList, skip] = genSparseHash(lens, list, iList, skip, true)
   }
-  return [...Array(16).keys()]
+  return _0to(16)
     .map(i => list.slice(i*16, i*16 + 16)
       .reduce((a,c) => a^c , 0)
     )

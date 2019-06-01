@@ -21,7 +21,7 @@ const getXcharsYlines = (a, x, y) => take(y, a).map(s => s.slice(0, x))
 
 describe('Day 14', async function() {
   this.timeout(0)
-  const sampleStrs = getXcharsYlines(multiKnotHash(p1.d), 2, 8)
+  const sampleStrs = getXcharsYlines(multiKnotHash(128)(p1.d), 2, 8)
 
   it(`Sample multiKnoxHash output of "${p1.d}" is valid`, () => {
     sampleStrs.should.deepEqual(p1.expectedSample)

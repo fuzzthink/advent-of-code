@@ -1,5 +1,5 @@
 const { maximum } = require('fkit')
-const { printRuntime, performance } = require('./helpers')
+const { printRuntime, performance, _0to } = require('./helpers')
 
 const parseLv = line => {
   const kv = line.split(': ')
@@ -11,7 +11,7 @@ const parseMaxes = str => {
   ), {})
   const lvs = Object.keys(lvMap)
   const maxLv = lvs |> maximum |> Number
-  return [...Array(maxLv+1).keys()].reduce((a, lv) => {
+  return _0to(maxLv+1).reduce((a, lv) => {
     a[lv] = lvMap[lv]
     return a
   }, [])
@@ -64,10 +64,17 @@ const run = (inStr, log) => {
   log.p2( delayNeeded(inStr)) // 3850260
 }
 
+module.exports = {
+  run,
+  pathCost,
+  delayNeeded,
+}
+
+/// ----------------------------------------------------------------------------
 /** p2 took .560 sec. It took 1:43:08 or 6188 secs (~11,000x) if initState is
  *   called 3850260 x. This was already a great improvement over a version where
- *   state change is played out instead of just checking if ptr is at 0 in at0when.
- *  This worst version probably takes 100-1000x of 1:43:08 since it started 
+ *   state change is played out instead of checking if ptr is at 0 in at0when.
+ *  This worst version probably takes > 100x of 1:43:08 since it started 
  *   slower and each delay loop took longer due to memory/GC.
  */   
 const initState = lvs => ({ /// ~1.6ms (6188 / 3850260)
@@ -88,7 +95,9 @@ const delayNeeded_poor_perf = inStr => {
     state = initState(lvs)
     at = 0
     while (at < maxes.length) {
-      state.scan[at] = calcScanPosition(maxes[at], at + delay) // same as at0when but returns index instead
+      state.scan[at] = calcScanPosition(maxes[at], at + delay) 
+      /// calcScanPosition same as at0when but returns index instead. Once it
+      ///  no longer return index, state isn't used, so initState not used too 
       if (state.scan[at]==0)
         break
       at += 1
@@ -99,10 +108,4 @@ const delayNeeded_poor_perf = inStr => {
       printRuntime( delay.toString().padStart(7, ' '), t0)
   }
   return delay
-}
-
-module.exports = {
-  run,
-  pathCost,
-  delayNeeded,
 }

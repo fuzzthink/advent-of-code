@@ -26,6 +26,9 @@ const printRuntime = (v, t0, suf='total runtime', sep=': ') => {
   }
 }
 
+const _0to = n => [...Array(n).keys()]
+const _2DAry = (x, y) => Array.from({length: y}).map(_ => Array.from({length: x}))
+
 module.exports = {
   strToInts2D,
   strToWords2D,
@@ -34,4 +37,6 @@ module.exports = {
   objLen,
   printRuntime,
   performance,
+  _0to,
+  _2DAry,
 }

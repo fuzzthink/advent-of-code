@@ -20,6 +20,9 @@ const parseConns = inStr => {
   return res 
 }
 
+/**
+ * @param {object} connMap - k:v where v is [] of own k or other k's
+ */
 const countConnsToNode = x => connMap => {
   let toVisit = Object.keys(connMap)
   let prvMappedLen = 0
