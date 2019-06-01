@@ -33,9 +33,13 @@ const genSparseHash = (lens, list, iList=0, skip=0, returnMeta=false) => {
 
 const mapASCII = s => [...s].map(s => s.charCodeAt())
 
-const knotHash = (lensStr, list, iList=0, skip=0, rounds=64) => {
-  let lens = [...mapASCII(lensStr), 17, 31, 73, 47, 23 ]
-  list = list || [...Array(256).keys()]
+/**
+ * @param {String} inStr - string to hash
+ * @return {String} of 32 chars
+ */
+const knotHash = (inStr, list=[], iList=0, skip=0, rounds=64) => {
+  let lens = [...mapASCII(inStr), 17, 31, 73, 47, 23 ]
+  list = list.length? list : [...Array(256).keys()]
   for (let i=0; i <rounds; i++) {
     [list, iList, skip] = genSparseHash(lens, list, iList, skip, true)
   }
