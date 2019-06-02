@@ -27,6 +27,10 @@ const genSparseHash = (lens, list, iList=0, skip=0, returnMeta=false) => {
       ...reversed,
       ...list.slice(iList + reversed.length),
     ] 
+    /// Performance Notes - Day 14.1 Runtime using:
+    ///  code above  -  4 secs   
+    ///  fkit.concat - 21 secs 
+    ///  fkit.concat, take, drop - 41 secs 
     iList = (iList + lens[0] + skip) % list.length
     return genSparseHash(lens.slice(1), list, iList, skip + 1, returnMeta)
   }
