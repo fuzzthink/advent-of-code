@@ -1,5 +1,5 @@
 const { sum, concat, map } = require('fkit')
-const { _0to, _2DAry } = require('./helpers')
+const { _0to, matXY } = require('./helpers')
 const { knotHash } = require('./day10')
 const { countGroups } = require('./day12')
 
@@ -24,7 +24,7 @@ const toPtVals = a => a.map((s, y) =>
 ) |> concat
 
 const ptValsTo2D = (xLen, yLen=xLen) => a => { /* [][] of 0|1|undefined */
-  const res = _2DAry(xLen, yLen)
+  const res = matXY(xLen, yLen)
   a.forEach(o => res[o.y][o.x] = Number(o.v))
   return res
 }
@@ -45,7 +45,7 @@ const _2DToConnMap = (xLen, yLen=xLen) => aa => {
       if (x < X && aa[y][x+1]) res[k].push(`${y},${x+1}`)
       if (y > 0 && aa[y-1][x]) res[k].push(`${y-1},${x}`)
       if (y < Y && aa[y+1][x]) res[k].push(`${y+1},${x}`)
-      if (!res[k].length) res[k].push(`${y},${x}`)
+      if (!res[k].length) res[k].push(k)
     }
   } 
   return res
@@ -58,7 +58,7 @@ const run = (inStr, log) => {
   const hash = inStr |> multiKnotHash(128)
   const ptVals = hash |> toPtVals
   log.p1(hash |> count1s ) // 8148
-  log.p2(ptVals |> countGroupsOf1 ) // > 1180
+  log.p2(ptVals |> countGroupsOf1 ) // 1180
 }
 module.exports = { 
   run,

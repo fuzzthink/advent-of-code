@@ -71,9 +71,13 @@ module.exports = {
 }
 
 /// ----------------------------------------------------------------------------
-/** p2 took .560 sec. It took 1:43:08 or 6188 secs (~11,000x) if initState is
- *   called 3850260 x. This was already a great improvement over a version where
- *   state change is played out instead of checking if ptr is at 0 in at0when.
+/** Notes on Part 2.
+ *  Current version takes 560ms. 
+ *  A previous version took 1:43:08 or 6188 secs (~11,000x) where initState is
+ *   called 3850260 times, due to at0when was (then named scanPosition) returning
+ *   index to be set to state.scan[at].
+ *  This was actually already a great improvement over a version where all
+ *   state changes are played out instead of setting state.scan[at].
  *  This worst version probably takes > 100x of 1:43:08 since it started 
  *   slower and each delay loop took longer due to memory/GC.
  */   
@@ -81,31 +85,3 @@ const initState = lvs => ({ /// ~1.6ms (6188 / 3850260)
   scan: lvs.reduce((a, lv) => ({...a, [lv]: 0}), {}),
   isUp: lvs.reduce((a, lv) => ({...a, [lv]: true}), {}),
 })
-const delayNeeded_poor_perf = inStr => {
-  const maxes = parseMaxes(inStr)
-  const lvs = Object.keys(maxes)
-  const t0 = performance.now()
-  const printTime = lvs.length > 12
-  let delay = 0
-  let canPass = false
-  let state, at
-  if (printTime)
-    console.log('Calculating Part 2:\nDelay at')
-  while (!canPass) {
-    state = initState(lvs)
-    at = 0
-    while (at < maxes.length) {
-      state.scan[at] = calcScanPosition(maxes[at], at + delay) 
-      /// calcScanPosition same as at0when but returns index instead. Once it
-      ///  no longer return index, state isn't used, so initState not used too 
-      if (state.scan[at]==0)
-        break
-      at += 1
-    }
-    canPass = at == maxes.length
-    delay += canPass? 0 : 1
-    if (printTime && delay % 10000 == 0)
-      printRuntime( delay.toString().padStart(7, ' '), t0)
-  }
-  return delay
-}
