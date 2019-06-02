@@ -1,5 +1,5 @@
 const should = require('should')
-const { genA, genB, lsb16Match, countLsbMatches } = require('../dist/day15')
+const { genA, genB, genA2, genB2, lsb16Match, countLsbMatches } = require('../dist/day15')
 
 // Test examples from instruction
 const p1 = {
@@ -20,6 +20,24 @@ const p1 = {
   iters: 40000000,
   expected: 588,
 }
+const p2 = {
+  iters: 5000000,
+  expected: 309,
+  a:
+`65
+1352636452
+1992081072
+530830436
+1980017072
+740335192`.split('\n').map(s => Number(s)),
+  b:
+`8921
+1233683848
+862516352
+1159784568
+1616057672
+412269392`.split('\n').map(s => Number(s)),
+}
 
 describe('Day 15', async function() {
   this.timeout(0)
@@ -37,6 +55,17 @@ describe('Day 15', async function() {
     }
   })
   it(`matches count on example is valid`, () => {
-    countLsbMatches(p1.a[0], p1.b[0], p1.iters).should.equal(p1.expected)
+    countLsbMatches(p1.a[0], p1.b[0], genA, genB, p1.iters).should.equal(p1.expected)
+  })
+  it(`matches count on example is valid - part 2`, () => {
+    countLsbMatches(p2.a[0], p2.b[0], genA2, genB2, p2.iters).should.equal(p2.expected)
+  })
+  it(`numGen2 on example is valid`, () => {
+    for (let i=0; i < p2.a.length -1; i++) {
+      const a = genA2(p2.a[i])
+      const b = genB2(p2.b[i])
+      a.should.equal(p2.a[i+1])
+      b.should.equal(p2.b[i+1])
+    }
   })
 })
