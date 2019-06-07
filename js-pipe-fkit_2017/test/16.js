@@ -1,24 +1,30 @@
 const should = require('should')
-const { exe } = require('../dist/day16')
+const { exeMoves, exeMovesNx, toHead, swapAt, swapXY } = require('../dist/day16')
 
 // Test examples from instruction
-const p1 = {
-  d: 'abcde'.split(''),
+const d = {
+  str: 'abcde',
   moves: 
 `s1
 x3/4
 pe/b`.split('\n'),
-  expected: 'baedc'.split(''),
+  expected: 'baedc',
+  expected2: 'ceadb',
 }
 
 describe('Day 16', async function() {
   this.timeout(0)
 
-  it(`exe moves on example is valid`, () => {
-    let d = [...p1.d]
-    p1.moves.forEach(move => {
-      d = exe(move, d)
-    })
-    d.should.deepEqual(p1.expected)
+  const a = d.str.split('')
+  it(`toHead, swapAt, swapXY works`, () => {
+    toHead(  2)([...a]).should.deepEqual('deabc'.split(''))
+    swapAt(0,2)([...a]).should.deepEqual('cbade'.split(''))
+    swapXY('a','b')([...a]).should.deepEqual('bacde'.split(''))
+  })
+  it(`exeMoves on example is valid`, () => {
+    exeMoves(d.moves, d.str).should.equal(d.expected)
+  })
+  it(`exeMovesNtimes on example is valid`, () => {
+    exeMovesNx(d.moves, 2, d.str).should.equal(d.expected2)
   })
 })
