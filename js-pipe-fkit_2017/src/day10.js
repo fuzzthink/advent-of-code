@@ -1,21 +1,13 @@
 const { reverse, map } = require('fkit')
+const { takeNFrom } = require('./deque')
 const { _0to } = require('./helpers')
-
-/**
- * @return {[int]} of a[frm..frm+cnt] reversed
- */
-const reverseAt = (frm, cnt, a) /*int,int,[int]*/ => 
-  (frm+cnt > a.length
-    ? a.slice(frm).concat( a.slice(0, frm+cnt - a.length) )
-    : a.slice(frm, frm+cnt)
-  ) |> reverse
 
 const genSparseHash = (lens, list, iList=0, skip=0, returnMeta=false) => {
   list = list || _0to(256)
   if (lens.length == 0)
     return returnMeta? [list, iList, skip] : list
   else {
-    const reversed = reverseAt(iList, lens[0], list)
+    const reversed = list |> takeNFrom(lens[0], iList) |> reverse
     const revLen0 = list.length - iList
     const wrapped = iList + lens[0] > list.length
     list = wrapped? [

@@ -1,15 +1,16 @@
 const { maximum } = require('fkit')
 const { objLen, strToInts } = require('./helpers')
 
-const zeroAt = idx => a /*int,[int]*/ => a.map((x, i) => i==idx? 0: x)
+const zeroAt = i => a /*int,[int]*/ => a.map((x, j) => j==i? 0: x)
 const mapAdd = n => a /*int,[int]*/ => a.map(x => x + n)
 
-/// Add 1 to cnt elms in a, starting from elm __after__ idx 
-const addOne = (idx, cnt) => a /*int,int,[int]*/ =>
-  cnt == 0? a :
-  a.map((x, i) => {
-    const toEnd = a.length - idx - 1
-    const _01 = (i > idx && i-idx <= cnt) || (i < idx && i+toEnd < cnt)? 1 : 0
+/// Add 1 to n elms in a, starting from elm __after__ i 
+const addOne = (i, n) => a /*int,int,[int]*/ =>
+  n == 0
+  ? a
+  : a.map((x, j) => {
+    const tilEnd = a.length - i - 1
+    const _01 = (j > i && j-i <= n) || (j < i && j+tilEnd < n)? 1 : 0
     return x + _01
   })
 

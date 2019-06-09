@@ -16,7 +16,6 @@
   "devDependencies": {
     "fkit": "^3.4.0",
     "mocha": "^6.1.4",
-    "pampy": "0.0.6",
     "should": "^13.2.3"
   },
   "babel": {

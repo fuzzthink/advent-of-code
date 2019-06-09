@@ -1,6 +1,6 @@
 const { splitAt, map, fold, min } = require('fkit')
+const { rotateR } = require('./deque')
 
-const toHead = n => a => [...a.slice(a.length - n), ...a.slice(0, a.length - n)]
 const swapAt = (i, j) => ary => {
   const x = ary[i]
   ary[i] = ary[j]
@@ -17,7 +17,7 @@ const swapXY = (x, y) => ary => {
 
 const exeOne = (moveStr, ary) => {
   const [fnStr, argStr] = moveStr |> splitAt(1)
-  const fn = fnStr=='s'? toHead: fnStr=='x'? swapAt: swapXY
+  const fn = fnStr=='s'? rotateR : fnStr=='x'? swapAt: swapXY
   const args =
     fnStr=='x'? argStr.split('/') |> map(Number) :
     fnStr=='p'? argStr.split('/') :
@@ -105,7 +105,7 @@ module.exports = {
   run,
   exeMoves,
   exeMovesNx,
-  toHead,
+  rotateR,
   swapAt,
   swapXY,
 }

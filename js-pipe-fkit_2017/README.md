@@ -1,4 +1,4 @@
-# [Advent of Code](https://adventofcode.com) 2017 in Functional Javascript (pipeline operator |>, fkit, pampy)
+# [Advent of Code](https://adventofcode.com) 2017 in Functional Javascript (pipeline operator |>, fkit)
 
 ## Commands
 
